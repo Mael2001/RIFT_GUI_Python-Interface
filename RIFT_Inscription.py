@@ -202,6 +202,7 @@ class Inscription(customtkinter.CTk):
         if(self.validate_fields()):
             self.write_to_sheet(FILE_NAME,"Inscription",data)
             print(f"Wrote to {FILE_NAME}")
+            self.trigger_message(f"Data has been written to {FILE_NAME}")
         else:
             print("Invalid inputs detected")
 
@@ -271,6 +272,9 @@ class Inscription(customtkinter.CTk):
         and self.women_category.get()==0):
             return False
         return True
+    #Information Box Trigger
+    def trigger_message(self,Msg,Title):
+        tkinter.messagebox.showinfo(title=Title, message=Msg)
     #Error Box Trigger
     def trigger_error(self,ErrorMsg,Error):
         tkinter.messagebox.showerror(title=Error, message=ErrorMsg)
