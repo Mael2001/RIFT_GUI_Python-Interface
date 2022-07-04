@@ -16,7 +16,7 @@ from PIL import Image, ImageTk
 
 #SIZE
 COMPLETE_WIDTH = 600
-COMPLETE_HEIGHT = 400
+COMPLETE_HEIGHT = 500
 
 #Working Directories
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -46,30 +46,45 @@ class App(customtkinter.CTk):
         self.configure(fg_color=("#189FE7"))
         #Titulo
         #bckImage = Image.open(os.path.join(CURRENT_DIRECTORY,"/images/bg.png"))
-        bckImage = Image.open(".\images\\bg.png")
-        bckImage_resized = bckImage.resize((WIDTH,HEIGHT))
-        bckImage = ImageTk.PhotoImage(bckImage_resized)
+        image_size = 140
+        logo = ImageTk.PhotoImage(Image.open(CURRENT_DIRECTORY + "/images/NoBckLogo.png").resize((image_size, image_size)))
+        image = Image.open(CURRENT_DIRECTORY + "/images/bg_gradient.jpg").resize((self.APP_WIDTH, self.APP_HEIGHT))
+        self.bg_image = ImageTk.PhotoImage(image)
 
+        self.image_label = tkinter.Label(master=self, image=self.bg_image)
+        #self.image_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-        #GUI BACKGROUND
-        homeBckImage = customtkinter.CTkLabel(master=self,
-                                                    corner_radius=7,
-                                                    image=bckImage)
-        homeBckImage.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+        #TITLE FRAME
+        title_Frame = customtkinter.CTkFrame(master=self,
+                                                    corner_radius=0,
+                                                    bg_color=None,
+                                                    fg_color="#189FE7")
+        title_Frame.grid(row=0,column=0,padx=15, pady=0,sticky="nsew")
+        #LEFT LOGO
+        button_1 = customtkinter.CTkButton(master=title_Frame, image=logo, text="", fg_color=None, width=50, height=50,corner_radius=10)
+        button_1.grid(row=0, column=0, columnspan=1, padx=15, pady=10)
+        button_1.configure(state=tkinter.DISABLED)
         #GUI TITLE
-        homeLabel = customtkinter.CTkLabel(master=self,
+        homeLabel = customtkinter.CTkLabel(master=title_Frame,
                                                     corner_radius=7,
                                                     height=80,
+                                                    width=100,
+                                                    bg_color=None,
                                                     fg_color=("white", "grey38"),  # <- custom tuple-color
                                                     text_font=("Arial",14),
                                                     text="RIFT PLATFORM\n" +
                                                         "Homepage")
-        homeLabel.grid(row=0,column=0,columnspan=2,padx=15,pady=10)
+        homeLabel.grid(row=0,column=1,columnspan=3,padx=25,pady=10)
+        #RIGHT LOGO
+        button_2 = customtkinter.CTkButton(master=title_Frame, image=logo, text="", fg_color=None, width=50, height=50,corner_radius=10)
+        button_2.grid(row=0, column=4, columnspan=1, padx=20, pady=10)
+        button_2.configure(state=tkinter.DISABLED)
 
         #BASE FRAME
         frame_home = customtkinter.CTkFrame(master=self,
                                                     width= App.APP_WIDTH,
                                                     height= App.APP_HEIGHT,
+                                                    bg_color=None,
                                                     fg_color=None,
                                                     corner_radius=10)
         frame_home.grid(row=1,column=0,padx=15, pady=20,sticky="nsew")
