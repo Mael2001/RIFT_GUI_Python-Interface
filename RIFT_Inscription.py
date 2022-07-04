@@ -192,6 +192,7 @@ class Inscription(customtkinter.CTk):
             self.boat_input.get(),
             self.captain_input.get(),
             self.phone_number_input.get(),
+            self.email_input.get(),
             "Participating" if self.billfish_category.get() else "Not Participating",
             "Participating" if self.rodeo_category.get() else "Not Participating",
             "Participating" if self.junior_category.get() else "Not Participating",
@@ -209,10 +210,6 @@ class Inscription(customtkinter.CTk):
         workbook = Workbook()
         sheet = workbook.active
         sheet.title = "Inscription"
-        workbook.save(path)
-    #Creating New Sheet
-    def create_sheets(self,path):
-        workbook = Workbook()
         workbook.create_sheet("Billfish")
         workbook.create_sheet("Rodeo")
         workbook.create_sheet("Junior")

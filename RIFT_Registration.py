@@ -1,10 +1,13 @@
 #Base Libraries
+from cgitb import text
 from logging import PlaceHolder
+from wsgiref import validate
 import pandas as pd
 import os
 from openpyxl import *
 from datetime import datetime
 import time
+import webbrowser
 
 #Graphic Libraries
 import tkinter.messagebox
@@ -31,6 +34,7 @@ class Registration(customtkinter.CTk):
 
     APP_WIDTH = COMPLETE_WIDTH
     APP_HEIGHT = COMPLETE_HEIGHT
+    current_team=[]
 
     def __init__(self):
         super().__init__()
@@ -119,6 +123,7 @@ class Registration(customtkinter.CTk):
                                                     values=["Billfish", "Rodeo", "Junior","Kids", "Women", "None"])
         self.category_combobox.grid(row=3,column=1,columnspan=2,padx=15, pady=20,sticky="nsew")
         self.category_combobox.set("None")
+        self.category_combobox.configure(state=tkinter.DISABLED)
 
 
         #FISH SELECT LABEL
@@ -132,6 +137,7 @@ class Registration(customtkinter.CTk):
                                                     values=["Fish", "None"])
         self.fish_combobox.grid(row=4,column=1,columnspan=2,padx=15, pady=20,sticky="nsew")
         self.fish_combobox.set("None")
+        self.fish_combobox.configure(state=tkinter.DISABLED)
 
         #HOOKUP TIME LABEL
         self.hookup_time_label = customtkinter.CTkLabel(master=self.frame_home,
@@ -140,11 +146,11 @@ class Registration(customtkinter.CTk):
         self.hookup_time_label.grid(row=5,column=0,columnspan=1,padx=15, pady=20,sticky="nsew")
 
         #HOOKUP TIME
-        self.hookupTime = customtkinter.CTkLabel(master=self.frame_home,
+        self.hookup_time = customtkinter.CTkLabel(master=self.frame_home,
                                                     corner_radius=7,
                                                     text=datetime.now().strftime("%H:%M:%S"),
                                                     width= Registration.APP_WIDTH/2-50)
-        self.hookupTime.grid(row=5,column=1,columnspan=1,padx=15, pady=20,sticky="nsew")
+        self.hookup_time.grid(row=5,column=1,columnspan=1,padx=15, pady=20,sticky="nsew")
 
         #REGISTER HOOKUP
         self.hookup_button = customtkinter.CTkButton(master=self.frame_home,
@@ -152,6 +158,7 @@ class Registration(customtkinter.CTk):
                                             text="Register Hookup",
                                             command=self.register_hookup)
         self.hookup_button.grid(row=6,column=0,columnspan=3,padx=15, pady=20,sticky="nsew")
+        self.hookup_button.configure(state=tkinter.DISABLED)
 
         #RELEASE TIME LABEL
         self.release_time_label = customtkinter.CTkLabel(master=self.frame_home,
@@ -170,6 +177,7 @@ class Registration(customtkinter.CTk):
         self.clean_release=customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Clean Release")
         self.clean_release.grid(row=7,column=2,columnspan=1,padx=15, pady=20,sticky="nsew")
+        self.clean_release.configure(state=tkinter.DISABLED)
 
         #DISCARD BUTTON
         self.discard_button = customtkinter.CTkButton(master=self.frame_home,
@@ -188,34 +196,147 @@ class Registration(customtkinter.CTk):
                                             text="Register Release",
                                             command=self.register_release)
         self.release_button.grid(row=8,column=2,columnspan=1,padx=15, pady=20,sticky="nsew")
+        self.release_button.configure(state=tkinter.DISABLED)
 
     #Register hookup
     def register_hookup(self):
+        if(self.validate_inputs()):
+            sheet_name=self.category_combobox.get()
+            wb = load_workbook(filename=FILE_NAME)
+            ws = wb[sheet_name]
+            if(ws.max_row < 1):
+                headers = [
+                    "ID",
+                    "BOAT_NAME",
+                    "CAPTAIN_NAME",
+                    "HOOKUP_TIME",
+                    "FISH",
+                    "RELEASE_TIME",
+                    "CLEAN_RELEASE",
+                    "POINTS"
+                    ]
+            self.write_to_sheet(FILE_NAME,sheet_name,headers)
+        else:
+            self.trigger_error("Please Fix Errors in the form","Unable to Continue")
+            return
+        sheet_name=self.category_combobox.get()
+        data = [
+            self.current_team['ID'],
+            self.current_team['BOAT_NAME'],
+            self.current_team['CAPTAIN_NAME'],
+            self.hookup_time.get(),
+            self.fish_combobox.get(),
+            "None",
+            "No",
+            50
+        ]
+        print(f"Wrote to {FILE_NAME}, sheet {sheet_name}")
+        self.write_to_sheet(FILE_NAME,sheet_name,data)
+
+    #Validation for all inputs
+    def validate_inputs(self):
+        if(self.category_combobox.get() == "None" or self.current_team[self.category_combobox.get()] == "Not Participating"):
+            self.trigger_error("Team is not participating in this Category", "Input error")
+            return False
+        if(self.fish_combobox.get() == "None"):
+            self.trigger_error("Invalid Fish Selected", "Input error")
+            return False
         return True
     #Register release
     def register_release(self):
-        return True
+        if(self.validate_inputs()):
+            sheetName=self.category_combobox.get()
+            hookup_result = self.search_hookup(sheetName)
+            self.rewrite_row(FILE_NAME,sheetName,hookup_result)
+            print(f"Wrote to {FILE_NAME}, sheet {sheetName}")
+        else:
+            self.trigger_error("Please Fix Errors in the form","Unable to Continue")
+            return
+
+    #Search Hookup Information
+    def search_hookup(self,sheetName):
+        excel_data = pd.read_excel(FILE_NAME,sheet_name=sheetName)
+        boat_id = self.boat_input.get()
+        hookup = excel_data.iloc[excel_data['ID'] == int(boat_id)]
+        return hookup.iloc[-1]
+
+    def rewrite_row(self,path,sheetName,hookup_result):
+        wb = load_workbook(path)
+        ws = wb[sheetName]
+        row = hookup_result['ID']+1
+        RELEASE_TIME = ws.cell(row=row,column=6)
+        RELEASE_TIME.value = self.release_time.get()
+        CLEAN_RELEASE = ws.cell(row=row,column=7)
+        CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
+        POINTS = ws.cell(row=row,column=8)
+        POINTS.value = 550
+        wb.save(path)
+
     #View XLSX file
     def view(self):
-        return True
+        webbrowser.open(FILE_NAME)
     #Discard all changes
     def discard(self):
+        #Resetting Search Results
+        self.search_boat_name.configure(state=tkinter.NORMAL)
+        self.search_captain_name.configure(state=tkinter.NORMAL)
+        self.search_boat_name.configure(placeholder_text="Boat Name")
+        self.search_captain_name.configure(placeholder_text="Captain Name")
+        self.search_boat_name.configure(state=tkinter.DISABLED)
+        self.search_captain_name.configure(state=tkinter.DISABLED)
+        #Refreshing Clocks
+        self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+        self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+        #Resetting default values
+        self.boat_input.configure(text="")
+        self.category_combobox.set("None")
+        self.fish_combobox.set("None")
+        self.clean_release.deselect()
+        #Disabling all controls when refreshing form
+        self.category_combobox.configure(state=tkinter.DISABLED)
+        self.fish_combobox.configure(state=tkinter.DISABLED)
+        self.hookup_button.configure(state=tkinter.DISABLED)
+        self.clean_release.configure(state=tkinter.DISABLED)
+        self.release_button.configure(state=tkinter.DISABLED)
         return True
     #Search ID
     def search(self):
-        return True
+        excel_data = pd.read_excel(FILE_NAME,sheet_name="Inscription")
+        boat_id = self.boat_input.get()
+        for result in (excel_data.isin([int(boat_id)]).any()):
+            if result:
+                self.current_team = excel_data.iloc[int(boat_id)-1]
+                #Writing Search Results
+                self.search_boat_name.configure(state=tkinter.NORMAL)
+                self.search_captain_name.configure(state=tkinter.NORMAL)
+                self.search_boat_name.configure(placeholder_text=self.current_team['BOAT_NAME'])
+                self.search_captain_name.configure(placeholder_text=self.current_team['CAPTAIN_NAME'])
+                self.search_boat_name.configure(state=tkinter.DISABLED)
+                self.search_captain_name.configure(state=tkinter.DISABLED)
+                #Enabling all controls when Successfully found ID
+                self.category_combobox.configure(state=tkinter.NORMAL)
+                self.fish_combobox.configure(state=tkinter.NORMAL)
+                self.hookup_button.configure(state=tkinter.NORMAL)
+                self.clean_release.configure(state=tkinter.NORMAL)
+                self.release_button.configure(state=tkinter.NORMAL)
+        self.trigger_error(f"No Inscription was found matching {boat_id}","No Register Found")
+
+    #Writing to File
+    def write_to_sheet(self,path,sheetName,data):
+        wb = load_workbook(path)
+        ws = wb[sheetName]
+        ws.append(data)
+        wb.save(path)
     #Update HookupTime
     def updateClock(self):
         time.sleep(1)
         while True:
-            self.hookupTime.configure(placeholder_text=datetime.now().strftime("%H:%M:%S"))
+            self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+            self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
             time.sleep(1)
+    #Error Box Trigger
+    def trigger_error(self,ErrorMsg,Error):
+        tkinter.messagebox.showerror(title=Error, message=ErrorMsg)
     #Close Program
     def on_closing(self, event=0):
         self.destroy()
-
-
-if __name__ == "__main__":
-    app = Registration()
-    t1 = threading.Thread(target=app.mainloop())
-    t2 = threading.Thread(target=app.updateClock())
