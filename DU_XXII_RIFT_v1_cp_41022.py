@@ -12,8 +12,8 @@ import datetime as dt
 from tkinter import ttk
 import numpy as np
 from openpyxl.descriptors.base import Length
-from openpyxl.workbook import workbook 
-import pandas as pd 
+from openpyxl.workbook import workbook
+import pandas as pd
 import matplotlib as plt
 import openpyxl
 from openpyxl import load_workbook
@@ -44,16 +44,16 @@ def isChecked_C1():
         estado = TRUE
   else:
          estado = FALSE
-        
+
   return(estado)
 
-def isChecked_C2(): 
+def isChecked_C2():
 
    if CheckVar2.get() == 1:
         estado = TRUE
    else:
          estado = FALSE
-        
+
    return(estado)
 
 def isChecked_C3():
@@ -62,29 +62,29 @@ def isChecked_C3():
         estado = TRUE
   else:
          estado = FALSE
-        
+
   return(estado)
 
-def isChecked_C4(): 
+def isChecked_C4():
 
    if CheckVar4.get() == 1:
         estado = TRUE
    else:
          estado = FALSE
-        
+
    return(estado)
 
-def isChecked_C5(): 
+def isChecked_C5():
 
    if CheckVar5.get() == 1:
         estado = TRUE
    else:
          estado = FALSE
-        
+
    return(estado)
 
 #Set Background
-bg_image = tk.PhotoImage(file='bg2.png')
+bg_image = tk.PhotoImage(file='./images/bg2.png')
 bg_label = tk.Label(root, image=bg_image)
 bg_label.place(relwidth=1, relheight=1)
 
@@ -92,7 +92,7 @@ bg_label.place(relwidth=1, relheight=1)
 frame = tk.Frame(root, bg='white')
 frame.place(relx=0.03, rely=0.05, relwidth=0.45, relheight = 0.4)
 
-i_image = tk.PhotoImage(file='inscrip.png')
+i_image = tk.PhotoImage(file='./images/inscrip.png')
 i_label = tk.Label(frame, image=i_image, bg='white')
 i_label.place(relx=0.85, rely=0.2)
 
@@ -133,7 +133,7 @@ C3.place(relx=0.45, rely=0.64)
 C4.place(relx=0.60, rely=0.64)
 CheckVar5 = tk.IntVar()
 C5 = tk.Checkbutton(frame, text = "Women", command=isChecked_C5, bg = "white",font=font_text_ins, variable = CheckVar5, onvalue = 1, offvalue = 0, height=2, width = 20, anchor='w')
-C5.place(relx=0.75, rely=0.64)          
+C5.place(relx=0.75, rely=0.64)
 
 def focusNext(widget):
  widget.tk_focusNext().focus_set()
@@ -146,7 +146,7 @@ def focusPrev(widget):
 def Iterador_billfish():
 
  os.chmod("XXII_RIFT.xlsx", S_IWRITE)
-      
+
  wb = load_workbook('XXII_RIFT.xlsx')
  ws = wb['Billfish']
 
@@ -158,7 +158,7 @@ def Iterador_billfish():
 def get_IDnum():
 
  os.chmod("XXII_RIFT.xlsx", S_IWRITE)
-      
+
  wb = load_workbook('XXII_RIFT.xlsx')
  ws = wb['Inscription']
 
@@ -167,32 +167,32 @@ def get_IDnum():
 
  return(lenght)
 
-def success_inscrip(): 
+def success_inscrip():
 
       messagebox.showinfo("Vessels", "Vessel Registration Succesful")
 
-def failed_inscrip(): 
+def failed_inscrip():
 
       messagebox.showwarning("Vessels", "Vessel Registration Unsuccesful, all fields must be populated")
 
-def wrong_num_length(): 
+def wrong_num_length():
 
       messagebox.showwarning("Vessels", "Phone number must be 8 digits")
 
 def register_inscrip():
-  
+
   os.chmod("XXII_RIFT.xlsx", S_IWRITE)
-  
+
   ID = get_IDnum()
-  
+
   wb = load_workbook('XXII_RIFT.xlsx')
   ws = wb['Inscription']
 
   if isChecked_C1() == True:
 
-        bf = "Billfish" 
-      
-  else: 
+        bf = "Billfish"
+
+  else:
 
         bf = ''
 
@@ -204,44 +204,44 @@ def register_inscrip():
   else:
 
         rd = ''
-  
+
   if isChecked_C3() == True:
 
         jr = "Junior"
 
 
-  else: 
+  else:
         jr = ''
 
   if isChecked_C4() == True:
 
         kd = "Kids"
-    
-  else: 
+
+  else:
         kd = ''
- 
+
   if isChecked_C5() == True:
 
         wm = "Women"
-  else: 
+  else:
         wm = ''
 
   if isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = bf + "|" + rd + "|" + jr + "|" + kd + "|" + wm 
+   cats = bf + "|" + rd + "|" + jr + "|" + kd + "|" + wm
    success_inscrip()
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = bf + "|" + rd + "|" + jr + "|" + kd 
-  
+   cats = bf + "|" + rd + "|" + jr + "|" + kd
+
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == False:
 
    cats = bf + "|" + rd + "|" + jr
-   
+
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == False:
 
-   cats = bf + "|" + rd 
+   cats = bf + "|" + rd
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == False:
 
@@ -254,34 +254,34 @@ def register_inscrip():
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == False:
 
    cats = jr
-  
+
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == False:
 
    cats = kd
-  
+
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == False:
 
    cats = wm
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == False:
 
-   cats = bf + "|" + jr 
+   cats = bf + "|" + jr
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = bf + "|" + kd 
+   cats = bf + "|" + kd
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == True:
 
-   cats = bf + "|" + wm 
+   cats = bf + "|" + wm
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == False:
 
-   cats = rd + "|" + jr 
+   cats = rd + "|" + jr
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = rd + "|"  + kd 
+   cats = rd + "|"  + kd
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == True:
 
@@ -289,37 +289,37 @@ def register_inscrip():
 
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = jr + "|" + kd 
+   cats = jr + "|" + kd
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == True:
 
    cats = jr + "|" + wm
 
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = kd + "|" + wm 
+   cats = kd + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = bf + "|" + rd + "|" + kd 
+   cats = bf + "|" + rd + "|" + kd
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == True:
 
-   cats = bf + "|" + rd + "|" + wm 
+   cats = bf + "|" + rd + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = bf + "|" + jr + "|" + kd 
+   cats = bf + "|" + jr + "|" + kd
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == True:
 
-   cats = bf + "|" + jr + "|" + wm 
+   cats = bf + "|" + jr + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = bf + "|" + kd + "|" + wm 
+   cats = bf + "|" + kd + "|" + wm
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = rd + "|" + jr + "|" + kd 
+   cats = rd + "|" + jr + "|" + kd
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == True:
 
@@ -327,39 +327,39 @@ def register_inscrip():
 
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats =jr + "|" + kd + "|" + wm 
+   cats =jr + "|" + kd + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == False:
 
-   cats = bf + "|" + rd + "|" + jr + "|" + kd 
+   cats = bf + "|" + rd + "|" + jr + "|" + kd
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == False and isChecked_C5() == True:
 
-   cats = bf + "|" + rd + "|" + jr + "|" + wm 
+   cats = bf + "|" + rd + "|" + jr + "|" + wm
 
   elif isChecked_C1() == False and isChecked_C2() == True and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = rd + "|" + jr + "|" + kd + "|" + wm 
+   cats = rd + "|" + jr + "|" + kd + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == False and isChecked_C3() == True and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = bf + "|" + jr + "|" + kd + "|" + wm 
+   cats = bf + "|" + jr + "|" + kd + "|" + wm
 
   elif isChecked_C1() == True and isChecked_C2() == True and isChecked_C3() == False and isChecked_C4() == True and isChecked_C5() == True:
 
-   cats = bf + "|" + rd + "|" + kd + "|" + wm 
+   cats = bf + "|" + rd + "|" + kd + "|" + wm
 
   elif isChecked_C1() == False and isChecked_C2() == False and isChecked_C3() == False and isChecked_C4() == False and isChecked_C5() == False:
 
    messagebox.showinfo("Warning", "Please select atlease one category for information to be registered")
- 
+
   if isChecked_C1() == True or isChecked_C2() == True or isChecked_C3() == True or isChecked_C4() == True or isChecked_C5() == True:
 
         if embarcation.get() != "" and captain.get() != "" and number.get() != "":
 
             phone_num_l = len(number.get())
 
-            if phone_num_l == 8: 
+            if phone_num_l == 8:
 
               ws.append({'A': ID, 'B': embarcation.get(), 'C': captain.get(),'D': cats, 'E': number.get()})
               wb.save('XXII_RIFT.xlsx')
@@ -369,15 +369,15 @@ def register_inscrip():
               embarcation.delete(0, END)
               captain.delete(0, END)
               number.delete(0, END)
-          
-            else: 
+
+            else:
 
               wrong_num_length()
 
-        else: 
+        else:
 
          failed_inscrip()
-            
+
 button_register = tk.Button(frame, text="Register", font="times 14", command=register_inscrip)
 button_register.place(relx=0.45, rely=0.82)
 
@@ -403,7 +403,7 @@ format_date = f"{date:%a, %b %d %Y}"
 w = Label(frame1, text=format_date, font=("times", 12), anchor='e')
 w.place(relx = .7, relwidth=0.25, relheight=0.1)
 
-#Design config for fish registry 
+#Design config for fish registry
 
 register_font = "times 14"
 
@@ -421,12 +421,12 @@ boat.place(relx=0.49, rely=0.10, relheight=0.045, relwidth=0.2)
 frame4 = tk.Frame(frame3)
 frame4.place(relx=0.25, rely=0.15, relwidth=0.5, relheight = 0.20)
 
-def excel_view(): 
+def excel_view():
    os.chmod('XXII_RIFT.xlsx', S_IWRITE)
    os.system("start EXCEL.EXE XXII_RIFT.xlsx")
 
 def find_boat(search_str):
-      
+
  wb = load_workbook('XXII_RIFT.xlsx')
  ws = wb['Inscription']
 
@@ -434,7 +434,7 @@ def find_boat(search_str):
 
  for cell in ws['A']:
 
-    if cell.value == num_ent: 
+    if cell.value == num_ent:
 
           cell_boat = cell
           return(cell.row)
@@ -464,39 +464,39 @@ def info_fishermen():
     row = ws[rows]
 
     for cell in row:
-          
-          if cell.column == 2: 
+
+          if cell.column == 2:
 
            boat_pr = cell.value
            printable_boat = "Boat Name: " + boat_pr
-           cat_d = ttk.Label(frame4, text = printable_boat, 
+           cat_d = ttk.Label(frame4, text = printable_boat,
               font = ("Times New Roman", 14))
            cat_d.place(relx=0.15, rely=0.1)
-          
-          elif cell.column == 3: 
-           
+
+          elif cell.column == 3:
+
            cap_pr = cell.value
            printable_cap = "Captain Name: " + cap_pr
-           cat_d1 = ttk.Label(frame4, text = printable_cap, 
+           cat_d1 = ttk.Label(frame4, text = printable_cap,
               font = ("Times New Roman", 14))
            cat_d1.place(relx=0.15, rely=0.28)
 
-          elif cell.column == 4: 
-           
+          elif cell.column == 4:
+
            cat = cell.value
            printable_cat = "Categories: " + cat
-           cat_d2 = ttk.Label(frame4, text = printable_cat, 
+           cat_d2 = ttk.Label(frame4, text = printable_cat,
               font = ("Times New Roman", 14))
            cat_d2.place(relx=0.15, rely=0.46)
 
-          elif cell.column == 5: 
-       
+          elif cell.column == 5:
+
            num_pr = cell.value
            printable_num = "Phone Number: " + str(num_pr)
-           cat_d3 = ttk.Label(frame4, text = printable_num, 
+           cat_d3 = ttk.Label(frame4, text = printable_num,
               font = ("Times New Roman", 14))
            cat_d3.place(relx=0.15, rely=0.64)
-          
+
           else:
 
             continue
@@ -519,14 +519,14 @@ real.place(relx=0.305, rely=0.75, relheight=0.045, relwidth=0.2)
 button9 = tk.Button(frame3, text="View Sheet", bg=btn_color, font=register_font, command=excel_view)
 button9.place(relx=0.415, rely=0.83)
 
-cat_db = ttk.Label(frame3, text = "Select Category", 
+cat_db = ttk.Label(frame3, text = "Select Category",
               font = ("Times New Roman", 15))
 cat_db.place(relx=0.15, rely=0.5)
 
 n = tk.StringVar()
-categories = ttk.Combobox(frame3, width = 10, textvariable = n, 
+categories = ttk.Combobox(frame3, width = 10, textvariable = n,
 font = ("Times New Roman", 15))
-  
+
 # Adding combobox drop down list
 categories['values'] = ('Billfish','Rodeo','Junior','Kids', 'Women')
 categories.place(relx=0.33, rely=0.5)
@@ -556,23 +556,23 @@ def save_fish():
   fish = fishname.get()
 
   return(fish)
-      
+
 button6 = tk.Button(frame3, text="Save", bg=btn_color, font=register_font, command=save_fish)
 button6.place(relx=0.66, rely=0.62)
 
 categories.bind("<<ComboboxSelected>>", fish_group)
 
-def isChecked_C6(): 
+def isChecked_C6():
 
    if CheckVar6.get() == 1:
         estado = TRUE
    else:
          estado = FALSE
-        
+
    return(estado)
 
 CheckVar6 = tk.IntVar()
-C6 = tk.Checkbutton(frame3, text = "Clean Release", command=isChecked_C6, bg = "white", font=register_font, variable = CheckVar6, 
+C6 = tk.Checkbutton(frame3, text = "Clean Release", command=isChecked_C6, bg = "white", font=register_font, variable = CheckVar6,
 onvalue = 1, offvalue = 0, height=2, width = 20, anchor='w')
 C6.place(relx=0.6, rely=0.7325)
 
@@ -580,7 +580,7 @@ def info_forcat():
 
     wb = load_workbook('XXII_RIFT.xlsx')
     ws = wb['Inscription']
-    
+
     num = boat.get()
     val_ent1 = num
     val_ent_int1= int(val_ent1)
@@ -590,29 +590,29 @@ def info_forcat():
     row = ws[rows]
 
     for cell in row:
-          
-          if cell.column == 2: 
+
+          if cell.column == 2:
 
            boat_pr = cell.value
            printable_boat = "Boat Name: " + boat_pr
-           cat_d = ttk.Label(frame4, text = printable_boat, 
+           cat_d = ttk.Label(frame4, text = printable_boat,
               font = ("Times New Roman", 14))
            cat_d.place(relx=0.15, rely=0.1)
-          
-          elif cell.column == 3: 
-           
+
+          elif cell.column == 3:
+
            cap_pr = cell.value
            printable_cap = "Captain Name: " + cap_pr
-           cat_d1 = ttk.Label(frame4, text = printable_cap, 
+           cat_d1 = ttk.Label(frame4, text = printable_cap,
               font = ("Times New Roman", 14))
            cat_d1.place(relx=0.15, rely=0.28)
-          
+
           else:
 
             continue
-    
+
     info = boat_pr, cap_pr
-  
+
     return(info)
 
 def fish_register():
@@ -631,78 +631,78 @@ def fish_register():
  pounds_fish = pounds.get()
 
  if isChecked_C6() == True:
-  clean_relpts = 50 
+  clean_relpts = 50
   Clean_r = 'Yes'
 
  else:
   clean_relpts = 0
   Clean_r = 'No'
-    
+
  if cat_store == "Billfish":
 
-   if fish_caught == "Blue Marlin": 
+   if fish_caught == "Blue Marlin":
         fish_points = 500
 
-   elif fish_caught == "White Marlin": 
+   elif fish_caught == "White Marlin":
 
        fish_points = 300
- 
-   elif fish_caught == "Sailfish" or  fish_caught == "Spearfish": 
+
+   elif fish_caught == "Sailfish" or  fish_caught == "Spearfish":
 
        fish_points = 200
-   
-   else: 
+
+   else:
        fish_points = 0
- 
+
  if cat_store == "Rodeo":
 
    wb = load_workbook('XXII_RIFT.xlsx')
    ws = wb['Rodeo']
-      
-   if fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 20: 
-         
+
+   if fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 20:
+
          fish_points = pounds_fish * 1
 
-   else: 
+   else:
          fish_points = 0
 
- if cat_store == "Junior": 
-   
+ if cat_store == "Junior":
+
    wb = load_workbook('XXII_RIFT.xlsx')
    ws = wb['Junior']
-  
-   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-    
+
+   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
      fish_points = pounds_fish * 1
 
-   else: 
+   else:
          fish_points = 0
 
- if cat_store == "Kids" : 
-   
+ if cat_store == "Kids" :
+
    wb = load_workbook('XXII_RIFT.xlsx')
    ws = wb['Kids']
-  
-   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-    
+
+   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
      fish_points = pounds_fish * 1
-   else: 
+   else:
          fish_points = 0
 
- if cat_store == "Women": 
-   
+ if cat_store == "Women":
+
    wb = load_workbook('XXII_RIFT.xlsx')
    ws = wb['Women']
-  
-   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-    
+
+   if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
      fish_points = pounds_fish * 1
-   else: 
+   else:
          fish_points = 0
 
  total_points = clean_relpts + fish_points
 
- release_time = clock() 
+ release_time = clock()
  day = format_date
  print(release_time)
  print(day)
@@ -719,44 +719,44 @@ def fish_register():
 
  print(ID_1)
 
- if cat_store == 'Billfish': 
- 
-  
+ if cat_store == 'Billfish':
+
+
   wb = load_workbook('XXII_RIFT.xlsx')
-  ws = wb["Billfish"] 
+  ws = wb["Billfish"]
   ws.append({'A': Iterador_billfish(),'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': total_points})
   wb.save('XXII_RIFT.xlsx')
 
- elif cat_store == 'Rodeo': 
-  
+ elif cat_store == 'Rodeo':
+
   wb = load_workbook('XXII_RIFT.xlsx')
-  ws = wb["Rodeo"] 
+  ws = wb["Rodeo"]
   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
   wb.save('XXII_RIFT.xlsx')
 
- elif cat_store == 'Junior': 
-  
+ elif cat_store == 'Junior':
+
   wb = load_workbook('XXII_RIFT.xlsx')
-  ws = wb["Rodeo"] 
+  ws = wb["Rodeo"]
   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
   wb.save('XXII_RIFT.xlsx')
 
- elif cat_store == 'Kids': 
-  
+ elif cat_store == 'Kids':
+
   wb = load_workbook('XXII_RIFT.xlsx')
-  ws = wb["Rodeo"] 
+  ws = wb["Rodeo"]
   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
   wb.save('XXII_RIFT.xlsx')
 
- elif cat_store == 'Women': 
-  
+ elif cat_store == 'Women':
+
   wb = load_workbook('XXII_RIFT.xlsx')
-  ws = wb["Rodeo"] 
+  ws = wb["Rodeo"]
   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
   wb.save('XXII_RIFT.xlsx')
 
 def reg_add_catch():
-      
+
       screen = tk.Tk()
       screen.title('Multiple Catch Registry')
 
@@ -765,7 +765,7 @@ def reg_add_catch():
 
       canvas = tk.Canvas(screen, height=HEIGHT, width=WIDTH)
       canvas.pack()
-      
+
       register_font = "times 14"
 
 
@@ -773,7 +773,7 @@ def reg_add_catch():
 
        for widgets in frame6.winfo_children():
         widgets.destroy()
- 
+
       frame5 = tk.Frame(screen, bg='white')
       frame5.place(relwidth=1, relheight = 1)
 
@@ -803,39 +803,39 @@ def reg_add_catch():
             row = ws[rows]
 
             for cell in row:
-                  
-                  if cell.column == 2: 
+
+                  if cell.column == 2:
 
                         boat_pr = cell.value
                         printable_boat = "Boat Name: " + boat_pr
-                        cat_d = ttk.Label(frame6, text = printable_boat, 
+                        cat_d = ttk.Label(frame6, text = printable_boat,
                               font = ("Times New Roman", 14))
                         cat_d.place(relx=0.15, rely=0.1)
-                  
-                  elif cell.column == 3: 
-                  
+
+                  elif cell.column == 3:
+
                         cap_pr = cell.value
                         printable_cap = "Captain Name: " + cap_pr
-                        cat_d1 = ttk.Label(frame6, text = printable_cap, 
+                        cat_d1 = ttk.Label(frame6, text = printable_cap,
                               font = ("Times New Roman", 14))
                         cat_d1.place(relx=0.15, rely=0.28)
 
-                  elif cell.column == 4: 
-                  
+                  elif cell.column == 4:
+
                         cat = cell.value
                         printable_cat = "Categories: " + cat
-                        cat_d2 = ttk.Label(frame6, text = printable_cat, 
+                        cat_d2 = ttk.Label(frame6, text = printable_cat,
                               font = ("Times New Roman", 14))
                         cat_d2.place(relx=0.15, rely=0.46)
 
-                  elif cell.column == 5: 
-                  
+                  elif cell.column == 5:
+
                         num_pr = cell.value
                         printable_num = "Phone Number: " + str(num_pr)
-                        cat_d3 = ttk.Label(frame6, text = printable_num, 
+                        cat_d3 = ttk.Label(frame6, text = printable_num,
                               font = ("Times New Roman", 14))
                         cat_d3.place(relx=0.15, rely=0.64)
-                  
+
                   else:
 
                         continue
@@ -856,14 +856,14 @@ def reg_add_catch():
       button9 = tk.Button(frame5, text="View Sheet", bg=btn_color, font=register_font, command=excel_view)
       button9.place(relx=0.415, rely=0.83)
 
-      cat_db = ttk.Label(frame5, text = "Select Category", 
+      cat_db = ttk.Label(frame5, text = "Select Category",
                   font = ("Times New Roman", 15))
       cat_db.place(relx=0.15, rely=0.5)
 
       n = tk.StringVar()
-      categories = ttk.Combobox(frame5, width = 10, textvariable = n, 
+      categories = ttk.Combobox(frame5, width = 10, textvariable = n,
       font = ("Times New Roman", 15))
-      
+
       # Adding combobox drop down list
       categories['values'] = ('Billfish','Rodeo','Junior','Kids', 'Women')
       categories.place(relx=0.33, rely=0.5)
@@ -899,25 +899,25 @@ def reg_add_catch():
       button10 = tk.Button(frame5, text="Save", bg=btn_color, font=register_font, command=save_fish_1)
       button10.place(relx=0.66, rely=0.62)
 
-      def isChecked_C7(): 
+      def isChecked_C7():
 
             if CheckVar7.get() == 1:
                estado = TRUE
             else:
                estado = FALSE
-        
+
             return(estado)
 
       CheckVar7 = tk.IntVar()
-      C7 = tk.Checkbutton(frame5, text = "Clean Release", command=isChecked_C7, bg = "white", font=register_font, variable = CheckVar6, 
+      C7 = tk.Checkbutton(frame5, text = "Clean Release", command=isChecked_C7, bg = "white", font=register_font, variable = CheckVar6,
       onvalue = 1, offvalue = 0, height=2, width = 20, anchor='w')
-      C7.place(relx=0.6, rely=0.7325)   
-          
+      C7.place(relx=0.6, rely=0.7325)
+
       def info_forcat():
 
             wb = load_workbook('XXII_RIFT.xlsx')
             ws = wb['Inscription']
-            
+
             num = boat.get()
             val_ent1 = num
             val_ent_int1= int(val_ent1)
@@ -927,29 +927,29 @@ def reg_add_catch():
             row = ws[rows]
 
             for cell in row:
-                  
-                  if cell.column == 2: 
+
+                  if cell.column == 2:
 
                         boat_pr = cell.value
                         printable_boat = "Boat Name: " + boat_pr
-                        cat_d = ttk.Label(frame4, text = printable_boat, 
+                        cat_d = ttk.Label(frame4, text = printable_boat,
                               font = ("Times New Roman", 14))
                         cat_d.place(relx=0.15, rely=0.1)
-                  
-                  elif cell.column == 3: 
-                  
+
+                  elif cell.column == 3:
+
                         cap_pr = cell.value
                         printable_cap = "Captain Name: " + cap_pr
-                        cat_d1 = ttk.Label(frame4, text = printable_cap, 
+                        cat_d1 = ttk.Label(frame4, text = printable_cap,
                               font = ("Times New Roman", 14))
                         cat_d1.place(relx=0.15, rely=0.28)
-                        
+
                   else:
 
                         continue
-            
+
             info = boat_pr, cap_pr
-            
+
             return(info)
 
       def fish_register():
@@ -968,73 +968,73 @@ def reg_add_catch():
             pounds_fish = pounds.get()
 
             if isChecked_C7() == True:
-                  clean_relpts = 50 
+                  clean_relpts = 50
                   Clean_r = 'Yes'
 
             else:
                   clean_relpts = 0
                   Clean_r = 'No'
-            
+
             if cat_store == "Billfish":
 
-             if fish_caught == "Blue Marlin": 
+             if fish_caught == "Blue Marlin":
                   fish_points = 500
 
-             elif fish_caught == "White Marlin": 
+             elif fish_caught == "White Marlin":
 
                   fish_points = 300
-            
-             elif fish_caught == "Sailfish" or  fish_caught == "Spearfish": 
+
+             elif fish_caught == "Sailfish" or  fish_caught == "Spearfish":
 
                   fish_points = 200
-            
-             else: 
+
+             else:
                   fish_points = 0
-            
+
             if cat_store == "Rodeo":
 
              wb = load_workbook('XXII_RIFT.xlsx')
              ws = wb['Rodeo']
-                  
-             if fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 20: 
-                        
+
+             if fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 20:
+
                         fish_points = pounds_fish * 1
 
-             else: 
+             else:
                         fish_points = 0
 
-            if cat_store == "Junior": 
-            
+            if cat_store == "Junior":
+
              wb = load_workbook('XXII_RIFT.xlsx')
              ws = wb['Junior']
-            
-             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-            
+
+             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
               fish_points = pounds_fish * 1
 
-             else: 
+             else:
                   fish_points = 0
 
-            if cat_store == "Kids" : 
-            
+            if cat_store == "Kids" :
+
              wb = load_workbook('XXII_RIFT.xlsx')
              ws = wb['Kids']
-                  
-             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-            
+
+             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
                       fish_points = pounds_fish * 1
-             else: 
+             else:
                   fish_points = 0
 
-            if cat_store == "Women": 
-            
+            if cat_store == "Women":
+
              wb = load_workbook('XXII_RIFT.xlsx')
              ws = wb['Women']
-            
-             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15: 
-            
+
+             if fish_caught == "Barracuda" or fish_caught == "Mackerel" or fish_caught == "King Fish" or fish_caught == "Wahoo" or fish_caught == "MahiMahi" or fish_caught == "TUna" and pounds >= 15:
+
                fish_points = pounds_fish * 1
-             else: 
+             else:
                   fish_points = 0
 
             total_points = clean_relpts + fish_points
@@ -1055,39 +1055,39 @@ def reg_add_catch():
 
             print(ID_1)
 
-            if cat_store == 'Billfish': 
-            
-            
+            if cat_store == 'Billfish':
+
+
                   wb = load_workbook('XXII_RIFT.xlsx')
-                  ws = wb["Billfish"] 
+                  ws = wb["Billfish"]
                   ws.append({'A': Iterador_billfish(),'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': total_points})
                   wb.save('XXII_RIFT.xlsx')
 
-            elif cat_store == 'Rodeo': 
-            
+            elif cat_store == 'Rodeo':
+
                  wb = load_workbook('XXII_RIFT.xlsx')
-                 ws = wb["Rodeo"] 
+                 ws = wb["Rodeo"]
                  ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
                  wb.save('XXII_RIFT.xlsx')
 
-            elif cat_store == 'Junior': 
-            
+            elif cat_store == 'Junior':
+
                   wb = load_workbook('XXII_RIFT.xlsx')
-                  ws = wb["Rodeo"] 
+                  ws = wb["Rodeo"]
                   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
                   wb.save('XXII_RIFT.xlsx')
 
-            elif cat_store == 'Kids': 
-            
+            elif cat_store == 'Kids':
+
                   wb = load_workbook('XXII_RIFT.xlsx')
-                  ws = wb["Rodeo"] 
+                  ws = wb["Rodeo"]
                   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
                   wb.save('XXII_RIFT.xlsx')
 
-            elif cat_store == 'Women': 
-            
+            elif cat_store == 'Women':
+
                   wb = load_workbook('XXII_RIFT.xlsx')
-                  ws = wb["Rodeo"] 
+                  ws = wb["Rodeo"]
                   ws.append({'B': ID_1, 'C': boat_info, 'D': cap_info,'E': hookup_time, 'F': fish_caught, 'G': release_time, 'H': Clean_r, 'I': pounds_fish, 'J': total_points})
                   wb.save('XXII_RIFT.xlsx')
 
@@ -1109,7 +1109,7 @@ def info_for_LB(val):
 
     wb = load_workbook('XXII_RIFT.xlsx')
     ws = wb['Inscription']
-    
+
     num = val
     val_ent1 = num
     val_ent_int1= int(val_ent1)
@@ -1119,33 +1119,33 @@ def info_for_LB(val):
     row = ws[rows]
 
     for cell in row:
-          
-          if cell.column == 2: 
+
+          if cell.column == 2:
 
            boat_pr = cell.value
            printable_boat = "Boat Name: " + boat_pr
-           
-          
-          elif cell.column == 3: 
-           
+
+
+          elif cell.column == 3:
+
            cap_pr = cell.value
            printable_cap = "Captain Name: " + cap_pr
-          
+
           else:
 
             continue
-    
+
     info = boat_pr, cap_pr
-  
+
     return(info)
 
 def Billfish_LB_info():
 
       req_col = [0, 1]
 
-      billfish = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Billfish', index_col=0, usecols=req_col) 
-      ins_info = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Inscription', index_col=0) 
-      billfish_all = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Billfish', index_col=0) 
+      billfish = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Billfish', index_col=0, usecols=req_col)
+      ins_info = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Inscription', index_col=0)
+      billfish_all = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Billfish', index_col=0)
       Id_col = billfish.filter(items=['ID'])
 
       i = Id_col.max()
@@ -1159,18 +1159,18 @@ def Billfish_LB_info():
       x = 1
 
       wb = load_workbook('XXII_RIFT.xlsx')
-      ws = wb["Billfish_LB"] 
+      ws = wb["Billfish_LB"]
 
       for row in ws['A2:E5']:
        for cell in row:
-        cell.value = None 
+        cell.value = None
 
       while (x <= i_1):
 
        boat_1, cap_1 = info_for_LB(x)
 
        print(x)
-      
+
        print(billfish_all[billfish_all['ID'] == x])
        data = billfish_all[billfish_all['ID'] == x]
 
@@ -1182,22 +1182,22 @@ def Billfish_LB_info():
        print(data_points)
        #print(values_points)
        print(sum)
-      
+
        wb = load_workbook('XXII_RIFT.xlsx')
-       ws = wb["Billfish_LB"] 
+       ws = wb["Billfish_LB"]
 
        #sum_val = data.sum(axis=7)
        #print("Total Points" + str(sum_val))
        if sum == "0":
 
-            x = x + 1 
+            x = x + 1
             continue
-       else: 
+       else:
        #ws.append({'A': str(itera),'B': str(x), 'C': boat_1, 'D': cap_1,'E': sum})
        #wb.save('XXII_RIFT.xlsx')
-      
+
         wb = load_workbook('XXII_RIFT.xlsx')
-        ws = wb["Billfish_LB_sorted"] 
+        ws = wb["Billfish_LB_sorted"]
 
         ws["A"+str(row_col_num)]= itera
         ws["B"+str(row_col_num)]= str(x)
@@ -1209,11 +1209,11 @@ def Billfish_LB_info():
 
         row_col_num = row_col_num + 1
         itera = itera + 1
-        x = x + 1 
+        x = x + 1
 
 
       wb = load_workbook('XXII_RIFT.xlsx')
-      ws = wb["Billfish_LB_sorted"] 
+      ws = wb["Billfish_LB_sorted"]
 
       x_len = str(len(ws['A']))
       start = "A2"
@@ -1227,7 +1227,7 @@ def Billfish_LB_info():
       billfish_LB_info = pd.read_excel('XXII_RIFT.xlsx',sheet_name='Billfish_LB', index_col=0)
       print(billfish_LB_info)
       sorted_BLB = billfish_LB_info.sort_values(by="Total Points", ascending=False)
-      
+
       group = start + ":" + end
 
       print(group)
