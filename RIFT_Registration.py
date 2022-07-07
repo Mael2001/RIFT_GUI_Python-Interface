@@ -50,21 +50,34 @@ class Registration(customtkinter.CTk):
         "Junior":[
             "Barracuda",
             "Mackerel",
-            "Kingfish",
+            "King Fish",
             "Wahoo",
+            "MahiMahi",
             "Dolphin",
             "Tuna"
         ],
         "Kids":[
-
+            "Barracuda",
+            "Mackerel",
+            "King Fish",
+            "Wahoo",
+            "MahiMahi",
+            "Dolphin",
+            "Tuna"
         ],
         "Women":[
-
+            "Barracuda",
+            "Mackerel",
+            "King Fish",
+            "Wahoo",
+            "MahiMahi",
+            "Dolphin",
+            "Tuna"
         ],
         "None":[
             "None"
         ]
-        }
+    }
     fish_prices = {
             "Blue Marlin":500,
             "White Marlin":300,
