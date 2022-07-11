@@ -35,6 +35,7 @@
     "@ionic/lab": "^3.2.13",
     "@ionic/pwa-elements": "^3.1.1",
     "capacitor-video-player": "^3.4.2",
+    "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-photo-library": "^2.3.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
