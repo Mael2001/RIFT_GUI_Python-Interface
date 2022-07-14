@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Storage } from '@capacitor/storage';
-import { Platform } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -17,24 +15,6 @@ export class VideoService {
   async loadVideos() {
     const videoList = await Storage.get({ key: this.VIDEOS_KEY });
     this.videos = JSON.parse(videoList.value) || [];
-    return this.videos;
-   /* // Retrieve cached photo array data
-    const videoList = await Storage.get({ key: this.photoStorage });
-    this.videos = JSON.parse(videoList.value) || [];
-    // Easiest way to detect when running on the web:
-    // “when the platform is NOT hybrid, do this”
-    if (!this.platform.is('hybrid')) {
-      // Display the photo by reading into base64 format
-      for (const photo of this.photos) {
-        // Read each saved photo's data from the Filesystem
-        const readFile = await Filesystem.readFile({
-            path: photo.filepath,
-            directory: Directory.Data
-        });
-        // Web platform only: Load the photo as base64 data
-        photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
-      }
-    }*/
   }
 
   async storeVideo(blob) {

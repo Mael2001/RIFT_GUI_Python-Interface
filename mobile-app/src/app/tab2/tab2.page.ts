@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } fr
 import { VideoService } from '../services/video.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import * as WebVPPlugin from 'capacitor-video-player';
-import { Animation, AnimationController } from '@ionic/angular';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const { CapacitorVideoPlayer } = Plugins;
 import {
@@ -12,7 +11,8 @@ import {
   animate,
   transition,
 } from '@angular/animations';
-
+import { UploadService } from '../services/upload-service.service';
+import { VideoPlayer, VideoOptions } from '@ionic-native/video-player/ngx';
 
 @Component({
   selector: 'app-tab2',
@@ -42,12 +42,18 @@ import {
 })
 export class Tab2Page {
   @ViewChild('video') captureElement: ElementRef;
+  videoOptions: VideoOptions;
   mediaRecorder: any;
-  videoPlayer: any;
   isRecording = false;
   selectedVideos = [];
 
-  constructor(public videoService: VideoService, private changeDetector: ChangeDetectorRef) {
+  constructor(public videoService: VideoService,
+    private changeDetector: ChangeDetectorRef,
+    public uploadService: UploadService,
+    private videoPlayer: VideoPlayer) {
+      this.videoOptions = {
+        volume: 0.7
+      };
   }
 
   getSelected(video){
@@ -65,17 +71,19 @@ export class Tab2Page {
     console.log(video);
   }
   uploadVideos() {
-    alert(`Uploading`);
+    alert(`Uploading ${this.selectedVideos.length} Videos`);
+    const imageAmount = this.selectedVideos.length;
+    if(imageAmount>0){
+        alert(`Uploading ${imageAmount} Videos`);
+        this.uploadService.uploadVideos(this.selectedVideos);
+        console.log(this.selectedVideos);
+    }else{
+      alert(`No Videos selected, please select some videos`);
+    }
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   async ngAfterViewInit() {
     await this.videoService.loadVideos();
-    // Initialise the video player plugin
-    if (Capacitor.isNative) {
-      this.videoPlayer = CapacitorVideoPlayer;
-    } else {
-      this.videoPlayer = WebVPPlugin.CapacitorVideoPlayer;
-    }
   }
 
   async recordVideo() {
@@ -116,7 +124,7 @@ export class Tab2Page {
     this.isRecording = false;
   }
 
-  async play(video) {
+  /*async play(video) {
     // Get the video as base64 data
     const realUrl = await this.videoService.getVideoUrl(video);
     // Show the player fullscreen
@@ -125,6 +133,13 @@ export class Tab2Page {
       url: realUrl,
       playerId: 'fullscreen',
       componentTag: 'app-home'
+    });
+  }*/
+  play(video) {
+    this.videoPlayer.play(video).then(() => {
+      console.log('video finished');
+    }).catch(error => {
+      console.log(error);
     });
   }
 }

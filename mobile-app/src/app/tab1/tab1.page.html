@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>RIFT Platform Image Handler</ion-title>
+    <ion-title>Image Handler</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
       <ion-row>
         <ion-col *ngFor="let photo of photoService.photos">
           <div #refDivEl class="scaled" [@selectItem]="getSelected(photo) ? 'selected' : 'notSelected'">
-            <ion-img [src]="photo.webviewPath" (click)="selectImage(photo)"
+            <ion-img *ngIf="photo.webviewPath" [src]="photo.webviewPath" (click)="selectImage(photo)"
               [ngStyle]="{'opacity': getSelected(photo)? '0.4': '1'}"></ion-img>
           </div>
         </ion-col>

@@ -1,6 +1,6 @@
 import { PhotoService } from '../services/photo.service';
-import { Animation, AnimationController } from '@ionic/angular';
-import { Component, HostBinding } from '@angular/core';
+import { AnimationController } from '@ionic/angular';
+import { Component } from '@angular/core';
 import {
   trigger,
   state,
@@ -8,6 +8,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { UploadService } from '../services/upload-service.service';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -39,7 +40,8 @@ export class Tab1Page {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   selected_images = [];
   constructor(private animationCtrl: AnimationController,
-    public photoService: PhotoService) {
+    public photoService: PhotoService,
+    public uploadService: UploadService) {
   }
 
   addPhotoToGallery() {
@@ -49,6 +51,7 @@ export class Tab1Page {
     const imageAmount = this.selected_images.length;
     if(imageAmount>0){
         alert(`Uploading ${imageAmount} Images`);
+        this.uploadService.uploadImages(this.selected_images);
         console.log(this.selected_images);
     }else{
       alert(`No images selected, please select some images`);
@@ -63,6 +66,7 @@ export class Tab1Page {
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   async ngOnInit() {
     await this.photoService.loadSaved();
+    console.log(this.photoService.photos);
   }
   selectImage(photo) {
     if (this.selected_images.indexOf(photo) === -1) {
