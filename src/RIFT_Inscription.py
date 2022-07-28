@@ -1,4 +1,5 @@
 #Base Libraries
+from ctypes import resize
 import pandas as pd
 import os
 from openpyxl import *
@@ -11,6 +12,7 @@ import tkinter
 import customtkinter
 
 #Image Libraries
+from PIL import Image, ImageTk
 
 #SIZE
 COMPLETE_WIDTH = 600
@@ -26,15 +28,14 @@ customtkinter.set_appearance_mode("system")  # Modes: system (default), light, d
 customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
-
-class Inscription(customtkinter.CTk):
+class Inscription(customtkinter.CTkToplevel):
 
     APP_WIDTH = COMPLETE_WIDTH
     APP_HEIGHT = COMPLETE_HEIGHT
     WRITE_FORMULA = False
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent):
+        super().__init__(parent)
         WIDTH = self.winfo_screenwidth()
         HEIGHT = self.winfo_screenwidth()
 
@@ -45,18 +46,12 @@ class Inscription(customtkinter.CTk):
         self.geometry(f"{Inscription.APP_WIDTH}x{Inscription.APP_HEIGHT}+{int(app_center_coordinate_x)}+{int(app_center_coordinate_y)}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
         self.configure(fg_color=("#189FE7"))
-        #Titulo
-        #bckImage = Image.open(os.path.join(CURRENT_DIRECTORY,"/images/bg.png"))
-        #bckImage = Image.open("./images/bg.png")
-        #bckImage_resized = bckImage.resize((WIDTH,HEIGHT))
-        #bckImage = ImageTk.PhotoImage(bckImage_resized)
+        image = Image.open("./images/BckImage.jpeg").resize((self.APP_WIDTH, self.APP_HEIGHT))
+        self.bg_image = ImageTk.PhotoImage(image)
 
+        self.image_label = tkinter.Label(master=self, image=self.bg_image)
+        self.image_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-        #GUI BACKGROUND
-        #homeBckImage = customtkinter.CTkLabel(master=self,
-        #                                            corner_radius=7,
-        #                                            image=bckImage)
-        #homeBckImage.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
         #GUI TITLE
         self.homeLabel = customtkinter.CTkLabel(master=self,
                                                     corner_radius=7,
@@ -272,8 +267,9 @@ class Inscription(customtkinter.CTk):
         return True
     #Validate Phone Number
     def validate_phone_number(self,value):
-        regex = "^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
-        if re.match(regex,value):
+        usa_regex = "^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
+        hnd_regex = "^([(]?\+?504[)]?)? ?[9|8|3|2]\d{3}-?\d{4}$"
+        if re.match(usa_regex,value) or re.match(hnd_regex,value):
             return True
         return False
     #Validate Email
@@ -303,4 +299,5 @@ class Inscription(customtkinter.CTk):
 
 if __name__ == "__main__":
     app = Inscription()
+    app.resizable(False,False)
     app.mainloop()

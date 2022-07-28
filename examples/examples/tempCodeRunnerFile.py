@@ -1,0 +1,1 @@
+ self.entry_1.place(relx=0.5, rely=0.52, anchor=tkinter.CENTER)

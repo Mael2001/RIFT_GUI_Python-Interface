@@ -1,5 +1,6 @@
 #Base Libraries
 from cgitb import text
+from cmath import nan
 from logging import PlaceHolder
 from wsgiref import validate
 import pandas as pd
@@ -14,8 +15,10 @@ import tkinter.messagebox
 import tkinter
 import customtkinter
 import threading
+import easygui
 
 #Image Libraries
+from PIL import Image, ImageTk
 
 #SIZE
 COMPLETE_WIDTH = 700
@@ -26,11 +29,7 @@ CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 FILE_NAME=".\dump\\test.xlsx"
 FILE_PATH = os.path.join(CURRENT_DIRECTORY,FILE_NAME)
 
-#Base Settings
-customtkinter.set_appearance_mode("system")  # Modes: system (default), light, dark
-customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
-
-class Registration(customtkinter.CTk):
+class Registration(customtkinter.CTkToplevel):
 
     APP_WIDTH = COMPLETE_WIDTH
     APP_HEIGHT = COMPLETE_HEIGHT
@@ -52,8 +51,7 @@ class Registration(customtkinter.CTk):
             "Mackerel",
             "King Fish",
             "Wahoo",
-            "MahiMahi",
-            "Dolphin",
+            "Dolphin MahiMahi",
             "Tuna"
         ],
         "Kids":[
@@ -61,8 +59,7 @@ class Registration(customtkinter.CTk):
             "Mackerel",
             "King Fish",
             "Wahoo",
-            "MahiMahi",
-            "Dolphin",
+            "Dolphin MahiMahi",
             "Tuna"
         ],
         "Women":[
@@ -70,8 +67,7 @@ class Registration(customtkinter.CTk):
             "Mackerel",
             "King Fish",
             "Wahoo",
-            "MahiMahi",
-            "Dolphin",
+            "Dolphin MahiMahi",
             "Tuna"
         ],
         "None":[
@@ -83,22 +79,22 @@ class Registration(customtkinter.CTk):
             "White Marlin":300,
             "Sailfish & Spearfish":200,
 
-            "Wahoo":100,
-            "Dolphin":100,
-            "Tuna":100,
-            "Kingfish":100,
+            "Wahoo":0,
+            "Dolphin":0,
+            "Tuna":0,
+            "Kingfish":0,
 
-            "Barracuda":100,
-            "Mackerel":100,
-            "King Fish":100,
-            "Wahoo":100,
-            "MahiMahi":100,
-            "Dolphin":100,
-            "Tuna":100
+            "Barracuda":0,
+            "Mackerel":0,
+            "King Fish":0,
+            "Wahoo":0,
+            "MahiMahi":0,
+            "Dolphin":0,
+            "Tuna":0
             }
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent):
+        super().__init__(parent)
         WIDTH = self.winfo_screenwidth()
         HEIGHT = self.winfo_screenwidth()
 
@@ -109,6 +105,11 @@ class Registration(customtkinter.CTk):
         self.geometry(f"{Registration.APP_WIDTH}x{Registration.APP_HEIGHT}+{int(app_center_coordinate_x)}+{int(app_center_coordinate_y)}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
         self.configure(fg_color=("#189FE7"))
+        image = Image.open("./images/BckImage.jpeg").resize((self.APP_WIDTH, self.APP_HEIGHT))
+        self.bg_image = ImageTk.PhotoImage(image)
+
+        self.image_label = tkinter.Label(master=self, image=self.bg_image)
+        self.image_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
         #GUI TITLE
         self.homeLabel = customtkinter.CTkLabel(master=self,
@@ -283,26 +284,24 @@ class Registration(customtkinter.CTk):
                     "POINTS"
                     ]
                 self.write_to_sheet(FILE_NAME,sheet_name,headers)
+            data = [
+                ws.max_row,
+                self.current_team['ID'],
+                self.current_team['BOAT_NAME'],
+                self.current_team['CAPTAIN_NAME'],
+                datetime.now().strftime("%H:%M:%S"),
+                self.fish_combobox.get(),
+                "None",
+                "No",
+                self.fish_prices[self.fish_combobox.get()]
+            ]
+            print(f"Wrote to {FILE_NAME}, sheet {sheet_name}")
+            self.write_to_sheet(FILE_NAME,sheet_name,data)
+            self.trigger_message(f"Hookup Registered at {FILE_NAME}, sheet {sheet_name}","Hookup Registration")
+            self.fish_prices[self.fish_combobox.get()] = 0
         else:
             self.trigger_error("Please Fix Errors in the form","Unable to Continue")
             return
-        sheet_name=self.category_combobox.get()
-        wb = load_workbook(filename=FILE_NAME)
-        ws = wb[sheet_name]
-        data = [
-            ws.max_row,
-            self.current_team['ID'],
-            self.current_team['BOAT_NAME'],
-            self.current_team['CAPTAIN_NAME'],
-            self.hookup_time.text,
-            self.fish_combobox.get(),
-            "None",
-            "No",
-            self.fish_prices[self.fish_combobox.get()]
-        ]
-        print(f"Wrote to {FILE_NAME}, sheet {sheet_name}")
-        self.write_to_sheet(FILE_NAME,sheet_name,data)
-        self.trigger_message(f"Hookup Registered at {FILE_NAME}, sheet {sheet_name}","Hookup Registration")
 
     #Validation for all inputs
     def validate_inputs(self):
@@ -312,10 +311,28 @@ class Registration(customtkinter.CTk):
         if(self.fish_combobox.get() == "None"):
             self.trigger_error("Invalid Fish Selected", "Input error")
             return False
+        if(self.fish_prices[self.fish_combobox.get()] == 0):
+            self.fish_prices[self.fish_combobox.get()] = int(easygui.enterbox("What's the fish Weight"))
+            if(self.fish_prices[self.fish_combobox.get()] < 20):
+                self.trigger_error("Fish must weigh atleast 20 pounds", "Input error")
+                self.fish_prices[self.fish_combobox.get()] = 0
+                return False
+        return True
+    #Validation for Release
+    def validate_release(self):
+        if(isinstance(self.current_team, pd.Series) == False):
+            self.trigger_error("No Team Searched", "Missing Action")
+            return False
+        if(self.category_combobox.get() == "None" or self.current_team[f"{self.category_combobox.get().upper()}_PRESENT"] == "Not Participating"):
+            self.trigger_error("No Category Selected", "Missing Input")
+            return False
+        if(self.boat_input.get() == ""):
+            self.trigger_error("No Boat Id Given", "Missing Input")
+            return False
         return True
     #Register release
     def register_release(self):
-        if(self.validate_inputs()):
+        if(self.validate_release()):
             sheetName=self.category_combobox.get()
             hookup_result = self.search_hookup(sheetName)
             self.rewrite_row(FILE_NAME,sheetName,hookup_result)
@@ -338,13 +355,15 @@ class Registration(customtkinter.CTk):
     def rewrite_row(self,path,sheetName,hookup_result):
         wb = load_workbook(path)
         ws = wb[sheetName]
-        row = hookup_result['HOOKUP_ID']+1
+        row = (hookup_result.iloc[0]['HOOKUP_ID'])+1
+        print(hookup_result)
+        print(row)
         RELEASE_TIME = ws.cell(row=row,column=7)
-        RELEASE_TIME.value = self.release_time.text
+        RELEASE_TIME.value = datetime.now().strftime("%H:%M:%S")
         CLEAN_RELEASE = ws.cell(row=row,column=8)
         CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
         POINTS = ws.cell(row=row,column=9)
-        POINTS.value = hookup_result['POINTS'] + 50 if self.clean_release.get() else hookup_result['POINTS']
+        POINTS.value = hookup_result.iloc[0]['POINTS'] + 50 if self.clean_release.get() else hookup_result.iloc[0]['POINTS']
         wb.save(path)
 
     #View XLSX file
@@ -423,4 +442,6 @@ class Registration(customtkinter.CTk):
 
 if __name__ == "__main__":
     app = Registration()
+    app.resizable(False,False)
+    app.set_BckImage()
     app.mainloop()

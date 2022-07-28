@@ -16,7 +16,7 @@ from PIL import Image, ImageTk
 
 #SIZE
 COMPLETE_WIDTH = 600
-COMPLETE_HEIGHT = 500
+COMPLETE_HEIGHT = 800
 
 #Working Directories
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -34,101 +34,73 @@ class App(customtkinter.CTk):
 
     def __init__(self):
         super().__init__()
-        WIDTH = self.winfo_screenwidth()
-        HEIGHT = self.winfo_screenwidth()
-
-        app_center_coordinate_x = (WIDTH/2) - (App.APP_WIDTH )
-        app_center_coordinate_y = (HEIGHT/2) - (App.APP_HEIGHT * 2)
         #Base Configuration
         self.title("Plataforma RIFT")
-        self.geometry(f"{App.APP_WIDTH}x{App.APP_HEIGHT}+{int(app_center_coordinate_x)}+{int(app_center_coordinate_y)}")
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
-        self.configure(fg_color=("#189FE7"))
-        #Titulo
-        #bckImage = Image.open(os.path.join(CURRENT_DIRECTORY,"/images/bg.png"))
-        image_size = 140
-        logo = ImageTk.PhotoImage(Image.open("./images/NoBckLogo.png").resize((image_size, image_size)))
-        image = Image.open("./images/bg_gradient.jpg").resize((self.APP_WIDTH, self.APP_HEIGHT))
+        self.geometry(f"{App.APP_WIDTH}x{App.APP_HEIGHT}")
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        image = Image.open("./images/HomeImage.jpeg").resize((self.APP_WIDTH, self.APP_HEIGHT))
         self.bg_image = ImageTk.PhotoImage(image)
 
         self.image_label = tkinter.Label(master=self, image=self.bg_image)
-        #self.image_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+        self.image_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-        #TITLE FRAME
-        title_Frame = customtkinter.CTkFrame(master=self,
-                                                    corner_radius=0,
-                                                    bg_color=None,
-                                                    fg_color="#189FE7")
-        title_Frame.grid(row=0,column=0,padx=15, pady=0,sticky="nsew")
-        #LEFT LOGO
-        button_1 = customtkinter.CTkButton(master=title_Frame, image=logo, text="", fg_color=None, width=50, height=50,corner_radius=10)
-        button_1.grid(row=0, column=0, columnspan=1, padx=15, pady=10)
-        button_1.configure(state=tkinter.DISABLED)
-        #GUI TITLE
-        homeLabel = customtkinter.CTkLabel(master=title_Frame,
-                                                    corner_radius=7,
-                                                    height=80,
-                                                    width=100,
-                                                    bg_color=None,
-                                                    fg_color=("white", "grey38"),  # <- custom tuple-color
-                                                    text_font=("Arial",14),
-                                                    text="RIFT PLATFORM\n" +
-                                                        "Homepage")
-        homeLabel.grid(row=0,column=1,columnspan=3,padx=25,pady=10)
-        #RIGHT LOGO
-        button_2 = customtkinter.CTkButton(master=title_Frame, image=logo, text="", fg_color=None, width=50, height=50,corner_radius=10)
-        button_2.grid(row=0, column=4, columnspan=1, padx=20, pady=10)
-        button_2.configure(state=tkinter.DISABLED)
-
-        #BASE FRAME
-        frame_home = customtkinter.CTkFrame(master=self,
-                                                    width= App.APP_WIDTH,
-                                                    height= App.APP_HEIGHT,
-                                                    bg_color=None,
-                                                    fg_color=None,
-                                                    corner_radius=10)
-        frame_home.grid(row=1,column=0,padx=15, pady=20,sticky="nsew")
 
         #RIFT INSCRIPTION
-        rift_inscription = customtkinter.CTkButton(master=frame_home,
+        rift_inscription = customtkinter.CTkButton(master=self,
                                                     text="Inscriptions",
-                                                    width=App.APP_WIDTH-50,
-                                                    text_color="white",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
                                                     command=self.open_inscriptions)
-        rift_inscription.grid(row=0,column=0,padx=10,pady=20)
+        rift_inscription.place(relx=0.3, rely=0.7, anchor=tkinter.CENTER)
 
         #RIFT REGISTRATION
-        rift_registration = customtkinter.CTkButton(master=frame_home,
+        rift_registration = customtkinter.CTkButton(master=self,
                                                     text="Registrations",
-                                                    width=App.APP_WIDTH-50,
-                                                    text_color="white",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
                                                     command=self.open_registration)
-        rift_registration.grid(row=1,column=0,padx=10,pady=20)
+        rift_registration.place(relx=0.7, rely=0.7, anchor=tkinter.CENTER)
 
         #RIFT PAGE
-        rift_website = customtkinter.CTkButton(master=frame_home,
+        rift_website = customtkinter.CTkButton(master=self,
                                                     text="Website",
-                                                    width=App.APP_WIDTH-50,
-                                                    text_color="white",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
                                                     command=self.open_website)
-        rift_website.grid(row=2,column=0,padx=10,pady=20)
+        rift_website.place(relx=0.3, rely=0.81, anchor=tkinter.CENTER)
 
         #RIFT LeaderBoard
-        rift_leaderBoard = customtkinter.CTkButton(master=frame_home,
+        rift_leaderBoard = customtkinter.CTkButton(master=self,
                                                     text="Leaderboard",
-                                                    width=App.APP_WIDTH-50,
-                                                    text_color="white",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
                                                     command=self.open_leaderboard)
-        rift_leaderBoard.grid(row=3,column=0,padx=10,pady=20)
+        rift_leaderBoard.place(relx=0.7, rely=0.81, anchor=tkinter.CENTER)
 
     #Open ./RIFG_Inscription
     def open_inscriptions(self):
-        inscriptions = RIFT_Inscription.Inscription()
-        inscriptions.mainloop()
+        inscriptions = RIFT_Inscription.Inscription(self)
+        inscriptions.resizable(False,False)
     #Open ./RIFG_Registration
     def open_registration(self):
-        registration = RIFT_Registration.Registration()
-        registration.mainloop()
+        registration = RIFT_Registration.Registration(self)
+        registration.resizable(False,False)
     #Open Competition Website
     def open_website(self):
         webbrowser.open('https://letsfishroatan.com/')
@@ -142,4 +114,5 @@ class App(customtkinter.CTk):
 
 if __name__ == "__main__":
     app = App()
+    app.resizable(False,False)
     app.mainloop()
