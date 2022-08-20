@@ -5,6 +5,7 @@ import webbrowser
 import logging
 import threading
 import time
+import sys
 
 #Subsystems
 import RIFT_Inscription
@@ -117,7 +118,7 @@ class App(customtkinter.CTk):
     #Close Program
     def on_closing(self, event=0):
         self.destroy()
-        x.stop()
+        sys.exit()
 
 
 if __name__ == "__main__":

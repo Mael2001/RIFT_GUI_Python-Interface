@@ -35,6 +35,7 @@ class Registration(customtkinter.CTkToplevel):
     APP_WIDTH = COMPLETE_WIDTH
     APP_HEIGHT = COMPLETE_HEIGHT
     current_team=[]
+    stop = False
     fish_types = {
         "Billfish":[
             "Blue Marlin",
@@ -261,8 +262,9 @@ class Registration(customtkinter.CTkToplevel):
                                             command=self.register_release)
         self.release_button.grid(row=8,column=2,columnspan=1,padx=15, pady=20,sticky="nsew")
         self.release_button.configure(state=tkinter.DISABLED)
-        x = threading.Thread(target=self.updateClock)
-        x.start()
+
+        clock_thread = threading.Thread(target=self.updateClock)
+        clock_thread.start()
 
     #Update Available Fishes
     def update_fish_list(self,value):
@@ -356,17 +358,18 @@ class Registration(customtkinter.CTkToplevel):
 
     #Write Release Information
     def rewrite_row(self,path,sheetName,hookup_result):
+        if(hookup_result.empty):
+            self.trigger_error("Participant is not registered for this category, please ensure correct category was selected", "Participant not found")
         wb = load_workbook(path)
         ws = wb[sheetName]
-        row = (hookup_result.iloc[0]['HOOKUP_ID'])+1
+        row = (hookup_result['HOOKUP_ID'])+1
         print(hookup_result)
-        print(row)
         RELEASE_TIME = ws.cell(row=row,column=7)
         RELEASE_TIME.value = datetime.now().strftime("%H:%M:%S")
         CLEAN_RELEASE = ws.cell(row=row,column=8)
         CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
         POINTS = ws.cell(row=row,column=9)
-        POINTS.value = hookup_result.iloc[0]['POINTS'] + 50 if self.clean_release.get() else hookup_result.iloc[0]['POINTS']
+        POINTS.value = hookup_result['POINTS'] + 50 if self.clean_release.get() else hookup_result['POINTS']
         wb.save(path)
 
     #View XLSX file
@@ -427,13 +430,10 @@ class Registration(customtkinter.CTkToplevel):
         wb.save(path)
     #Update HookupTime
     def updateClock(self):
-        while True:
-            try:
-                self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
-                self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
-                time.sleep(1)
-            except:
-                print("Window Closed")
+        while self.stop == False:
+            self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+            self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+            time.sleep(1)
     #Information Box Trigger
     def trigger_message(self,Msg,Title):
         tkinter.messagebox.showinfo(title=Title, message=Msg)
@@ -442,6 +442,8 @@ class Registration(customtkinter.CTkToplevel):
         tkinter.messagebox.showerror(title=Error, message=ErrorMsg)
     #Close Program
     def on_closing(self, event=0):
+        self.stop = True
+        time.sleep(0.1)
         self.destroy()
 
 if __name__ == "__main__":
