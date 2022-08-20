@@ -20,7 +20,7 @@ COMPLETE_HEIGHT = 600
 
 #Working Directories
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-FILE_NAME=".\dump\\test.xlsx"
+FILE_NAME=".\dump\\RIFT.xlsx"
 FILE_PATH = os.path.join(CURRENT_DIRECTORY,FILE_NAME)
 
 #Base Settings

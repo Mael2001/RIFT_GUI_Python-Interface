@@ -9,6 +9,7 @@ from openpyxl import *
 from datetime import datetime
 import time
 import webbrowser
+import threading
 
 #Graphic Libraries
 import tkinter.messagebox
@@ -26,7 +27,7 @@ COMPLETE_HEIGHT = 800
 
 #Working Directories
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-FILE_NAME=".\dump\\test.xlsx"
+FILE_NAME=".\dump\\RIFT.xlsx"
 FILE_PATH = os.path.join(CURRENT_DIRECTORY,FILE_NAME)
 
 class Registration(customtkinter.CTkToplevel):
@@ -260,6 +261,8 @@ class Registration(customtkinter.CTkToplevel):
                                             command=self.register_release)
         self.release_button.grid(row=8,column=2,columnspan=1,padx=15, pady=20,sticky="nsew")
         self.release_button.configure(state=tkinter.DISABLED)
+        x = threading.Thread(target=self.updateClock)
+        x.start()
 
     #Update Available Fishes
     def update_fish_list(self,value):
@@ -416,7 +419,6 @@ class Registration(customtkinter.CTkToplevel):
                 self.release_button.configure(state=tkinter.NORMAL)
                 return
         self.trigger_error(f"No Inscription was found matching {boat_id}","No Register Found")
-
     #Writing to File
     def write_to_sheet(self,path,sheetName,data):
         wb = load_workbook(path)
@@ -425,11 +427,13 @@ class Registration(customtkinter.CTkToplevel):
         wb.save(path)
     #Update HookupTime
     def updateClock(self):
-        time.sleep(1)
         while True:
-            self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
-            self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
-            time.sleep(1)
+            try:
+                self.hookup_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+                self.release_time.configure(text=datetime.now().strftime("%H:%M:%S"))
+                time.sleep(1)
+            except:
+                print("Window Closed")
     #Information Box Trigger
     def trigger_message(self,Msg,Title):
         tkinter.messagebox.showinfo(title=Title, message=Msg)

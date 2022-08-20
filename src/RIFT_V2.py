@@ -2,6 +2,9 @@
 from email.mime import image
 import os
 import webbrowser
+import logging
+import threading
+import time
 
 #Subsystems
 import RIFT_Inscription
@@ -95,24 +98,33 @@ class App(customtkinter.CTk):
 
     #Open ./RIFG_Inscription
     def open_inscriptions(self):
+        logging.info("Opening Inscriptions")
         inscriptions = RIFT_Inscription.Inscription(self)
         inscriptions.resizable(False,False)
     #Open ./RIFG_Registration
     def open_registration(self):
+        logging.info("Opening Registration")
         registration = RIFT_Registration.Registration(self)
         registration.resizable(False,False)
     #Open Competition Website
     def open_website(self):
+        logging.info("Opening Website")
         webbrowser.open('https://letsfishroatan.com/')
     #Open Leaderboards Page'
     def open_leaderboard(self):
+        logging.info("Opening Leaderboards")
         webbrowser.open('https://www.letsfishroatan.com/#TOURNAMENT')
     #Close Program
     def on_closing(self, event=0):
         self.destroy()
+        x.stop()
 
 
 if __name__ == "__main__":
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO,
+                        datefmt="%H:%M:%S")
+    logging.info("Initializing Application")
     app = App()
     app.resizable(False,False)
     app.mainloop()
