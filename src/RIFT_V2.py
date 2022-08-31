@@ -6,10 +6,15 @@ import logging
 import threading
 import time
 import sys
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox as mb
 
 #Subsystems
 import RIFT_Inscription
 import RIFT_Registration
+import RIFT_Detector
+import FTPLib
 
 #Graphic Libraries
 import tkinter
@@ -39,7 +44,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         #Base Configuration
-        self.title("Plataforma RIFT")
+        self.title("RIFT Mainpage")
         self.geometry(f"{App.APP_WIDTH}x{App.APP_HEIGHT}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         image = Image.open("./images/HomeImage.jpeg").resize((self.APP_WIDTH, self.APP_HEIGHT))
@@ -97,6 +102,29 @@ class App(customtkinter.CTk):
                                                     command=self.open_leaderboard)
         rift_leaderBoard.place(relx=0.7, rely=0.81, anchor=tkinter.CENTER)
 
+        #RIFT FTP Server
+        rift_ftp_server = customtkinter.CTkButton(master=self,
+                                                    text="Load Content",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
+                                                    command=self.download_content)
+        rift_ftp_server.place(relx=0.3, rely=0.92, anchor=tkinter.CENTER)
+
+        #RIFT Image & Video Detector
+        rift_detector = customtkinter.CTkButton(master=self,
+                                                    text="Detector",
+                                                    height=80,
+                                                    width=230,
+                                                    corner_radius=5,
+                                                    fg_color="white",
+                                                    text_color="black",
+                                                    text_font=("Adobe Ming Std L",25),
+                                                    command=self.open_detector)
+        rift_detector.place(relx=0.7, rely=0.92, anchor=tkinter.CENTER)
     #Open ./RIFG_Inscription
     def open_inscriptions(self):
         logging.info("Opening Inscriptions")
@@ -115,6 +143,19 @@ class App(customtkinter.CTk):
     def open_leaderboard(self):
         logging.info("Opening Leaderboards")
         webbrowser.open('https://www.letsfishroatan.com/#TOURNAMENT')
+    #Open ./RIGT_Detector
+    def open_detector(self):
+        logging.info("Opening Image & Video Detector")
+        detector = RIFT_Detector.Detector(self)
+        detector.resizable(False,False)
+    #Download FTP Content
+    def download_content(self):
+        res=mb.askquestion('Exit Application', 'Do you really want to exit')
+        if res == 'yes' :
+            logging.info("Downloading FTP Content")
+            FTPLib.downloadFTP()
+        else:
+            logging.info("FTP Content Download Canceled")
     #Close Program
     def on_closing(self, event=0):
         self.destroy()

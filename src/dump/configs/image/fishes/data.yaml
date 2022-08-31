@@ -1,0 +1,5 @@
+train: ./fishes/train/images
+val: ./fishes/valid/images
+test: ./fishes/test/images
+nc: 12
+names: ['Barracuda', 'Big Eye Tuna', 'Black Fin Tuna', 'Blue Marlin', 'Dolphin Mahi Mahi', 'King Mackerel', 'Sail Fish', 'Spanish Mackerel', 'Spear Fish', 'Wahoo', 'White Marlin', 'Yellowfin Tuna']

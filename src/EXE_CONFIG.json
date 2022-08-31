@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/Marzo/OneDrive/Documents/Q4 2022/Proyecto de Graduacion Fase I/Fishing Tournament 2021 Repos/gui/src/RIFT_V2.py"
+   "value": "C:/Users/Marzo/OneDrive/Documents/Q4_2022/Proyecto_Fase_1/RIFT_Repos/gui/src/RIFT_V2.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "C:/Users/Marzo/OneDrive/Documents/Q4 2022/Proyecto de Graduacion Fase I/Fishing Tournament 2021 Repos/gui/src/images/NoBckLogo.ico"
+   "value": "C:/Users/Marzo/OneDrive/Documents/Q4_2022/Proyecto_Fase_1/RIFT_Repos/gui/src/images/NoBckLogo.ico"
   },
   {
    "optionDest": "ascii",
@@ -72,6 +72,14 @@
   {
    "optionDest": "datas",
    "value": "C:/Users/Marzo/AppData/Local/Programs/Python/Python310/Lib/site-packages/customtkinter;customtkinter/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Marzo/OneDrive/Documents/Q4_2022/Proyecto_Fase_1/RIFT_Repos/gui/src/dump;dump/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/Marzo/OneDrive/Documents/Q4_2022/Proyecto_Fase_1/RIFT_Repos/gui/src/images;images/"
   }
  ],
  "nonPyinstallerOptions": {

@@ -1,0 +1,5 @@
+train: ./fishing/train/images
+val: ./fishing/valid/images
+test: ./fishing/test/images
+nc: 2
+names: ['Liberacion no segura', 'Liberacion segura']
