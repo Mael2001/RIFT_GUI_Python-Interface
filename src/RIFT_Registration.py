@@ -15,7 +15,6 @@ import threading
 import tkinter.messagebox
 import tkinter
 import customtkinter
-import threading
 import easygui
 
 #Image Libraries

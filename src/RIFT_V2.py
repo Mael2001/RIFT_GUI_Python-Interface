@@ -9,6 +9,8 @@ import sys
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox as mb
+import threading
+import ctypes
 
 #Subsystems
 import RIFT_Inscription
@@ -150,10 +152,12 @@ class App(customtkinter.CTk):
         detector.resizable(False,False)
     #Download FTP Content
     def download_content(self):
-        res=mb.askquestion('Exit Application', 'Do you really want to exit')
+        res=mb.askquestion('Download FTP Content', 'Are you sure you want to download all FTP content')
         if res == 'yes' :
             logging.info("Downloading FTP Content")
             FTPLib.downloadFTP()
+            ctypes.windll.user32.MessageBoxW(0, "FTP Download has been successfully downloaded", "Finished Downloads", 0)
+            logging.info("Finished Download")
         else:
             logging.info("FTP Content Download Canceled")
     #Close Program
