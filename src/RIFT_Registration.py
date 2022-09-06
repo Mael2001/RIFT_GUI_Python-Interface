@@ -362,13 +362,14 @@ class Registration(customtkinter.CTkToplevel):
         wb = load_workbook(path)
         ws = wb[sheetName]
         row = (hookup_result['HOOKUP_ID'])+1
+        row = row.values[0]
         print(hookup_result)
         RELEASE_TIME = ws.cell(row=row,column=7)
         RELEASE_TIME.value = datetime.now().strftime("%H:%M:%S")
         CLEAN_RELEASE = ws.cell(row=row,column=8)
         CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
         POINTS = ws.cell(row=row,column=9)
-        POINTS.value = hookup_result['POINTS'] + 50 if self.clean_release.get() else hookup_result['POINTS']
+        POINTS.value = hookup_result['POINTS'].values[0] + 50 if self.clean_release.get() else hookup_result['POINTS'].values[0]
         wb.save(path)
 
     #View XLSX file
