@@ -128,29 +128,9 @@ class Detector(customtkinter.CTkToplevel):
             self.trigger_error("Invalid file was selected", "Invalid File")
             return
         img = cv2.imread(file_path)
-
-        limit_sup_height = 750
-        limit_sup_width = 1000
-
-        limit_inf_height = 400
-        limit_inf_width = 600
-
-        if img.shape[1] > limit_sup_width or img.shape[0] > limit_sup_height:
-            width = limit_sup_width
-            height = limit_sup_height
-            dim = (width, height)
-        elif img.shape[1] > 900 and img.shape[0] > 700:
-            width = limit_sup_width
-            height = limit_sup_height
-            dim = (width, height)
-        elif img.shape[1] < limit_inf_width or img.shape[0] < limit_inf_height:
-            width = limit_inf_width
-            height = limit_inf_height
-            dim = (width, height)
-        else:
-            width = img.shape[1]
-            height = img.shape[0]
-            dim = (width, height)
+        width = img.shape[1]
+        height = img.shape[0]
+        dim = (640, 640)
 
         # resize image
         resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
@@ -158,13 +138,12 @@ class Detector(customtkinter.CTkToplevel):
             classes = f.read().splitlines()
         model = self.create_detection_model(IMAGE_WEIGHT_PATH, IMAGE_DETECTOR_CFG_PATH)
 
-        classIds, scores, boxes = model.detect(
-            resized, confThreshold=0.10, nmsThreshold=0.4
-        )
-        data_mod1 = classIds, classes
-        confidence = str(scores)
-        detects = str(self.count_objects(data_mod1))
-        print(f'Detections:{detects}\tImage: {file_path}\tConfidence: {confidence}')
+        classIds, scores, boxes = model.detect(resized, confThreshold=0.6, nmsThreshold=0.4)
+        data_mod = classIds, classes
+        detects = self.count_objects(data_mod)
+        if(len(detects) != 0):
+            for key, value in detects.items():
+                print(f'Detections:{key}\nClass Id: {classIds}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
         for (classId, score, box) in zip(classIds, scores, boxes):
             cv2.rectangle(
                 resized,
@@ -179,7 +158,7 @@ class Detector(customtkinter.CTkToplevel):
                 resized,
                 text,
                 (box[0]+5, box[1] + 25),
-                cv2.FONT_HERSHEY_DUPLEX,
+                cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 color=(0, 0, 255),
                 thickness=2,
@@ -190,33 +169,32 @@ class Detector(customtkinter.CTkToplevel):
     def set_default_image_weight(self):
         global IMAGE_WEIGHT_PATH
         if(IMAGE_WEIGHT_PATH == ''):
-            for filename in os.listdir("./dump/weights/image"):
-                if (filename.lower().endswith(('.weights'))):
-                    IMAGE_WEIGHT_PATH = os.path.abspath(f'./dump/weights/image/{filename}')
+            for file_path in os.listdir("./dump/weights/image"):
+                if (file_path.lower().endswith(('.weights'))):
+                    IMAGE_WEIGHT_PATH = os.path.abspath(f'./dump/weights/image/{file_path}')
 
     #Set Default Image Weight
     def set_default_video_weight(self):
         global VIDEO_WEIGHT_PATH
         if(VIDEO_WEIGHT_PATH == ''):
-            for filename in os.listdir("./dump/weights/video"):
-                if (filename.lower().endswith(('.weights'))):
-                    VIDEO_WEIGHT_PATH = os.path.abspath(f'./dump/weights/video/{filename}')
+            for file_path in os.listdir("./dump/weights/video"):
+                if (file_path.lower().endswith(('.weights'))):
+                    VIDEO_WEIGHT_PATH = os.path.abspath(f'./dump/weights/video/{file_path}')
 
     #Image Weight Selector
     def define_image_weight(self):
-        Tk().withdraw()
-        filename = askopenfilename()
-        if (filename.lower().endswith(('.weights'))):
-            IMAGE_WEIGHT_PATH = filename
-        elif(filename.lower().endswith(('.cfg'))):
-            IMAGE_DETECTOR_CFG_PATH = filename
+        file_path = askopenfilename()
+        if (file_path.lower().endswith(('.weights'))):
+            IMAGE_WEIGHT_PATH = file_path
+        elif(file_path.lower().endswith(('.cfg'))):
+            IMAGE_DETECTOR_CFG_PATH = file_path
         else:
             self.trigger_error("Invalid file was selected", "Invalid File")
 
     #Video Detector
     def open_video_detector(self):
         Tk().withdraw()
-        filename = askopenfilename()
+        file_path = askopenfilename()
         if (not file_path.lower().endswith(('.mp4'))):
             self.trigger_error("Invalid file was selected", "Invalid File")
             return
@@ -224,32 +202,31 @@ class Detector(customtkinter.CTkToplevel):
         class_names = []
         with open(VIDEO_CLASSES, "r") as f:
             class_names = [cname.strip() for cname in f.readlines()]
-        cap = cv2.VideoCapture(filename)
+            cap = cv2.VideoCapture(file_path)
         model = self.create_detection_model(VIDEO_WEIGHT_PATH, VIDEO_DETECTOR_CFG_PATH)
 
         while True:
             _, frame = cap.read()
-            width = int(frame.shape[1])
-            height = int(frame.shape[0])
+            width = int(640)
+            height = int(640)
             dim = (width, height)
-            print(dim)
-            frame_resize = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
             start = time.time()
-            classes, scores, boxes = model.detect(frame_resize, 0.50, 0.2)
+            frame_resize = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+            classes, scores, boxes = model.detect(frame_resize, 0.6, 0.4)
             data_mod = classes, class_names
-            confidence = str(scores)
-            detects = str(self.count_objects(data_mod1))
-            print(f'Detections:{detects}\tImage: {file_path}\tConfidence: {confidence}')
+            detects = self.count_objects(data_mod)
+            if(len(detects) != 0):
+                print(f'Detections:{detects.keys()}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
             end = time.time()
             for (classid, score, box) in zip(classes, scores, boxes):
                 color = COLORS[int(classid) % len(COLORS)]
-                label = f"{class_names[classid[0]]} : {score}"
+                label = f"{class_names[classid]} : {score}"
                 cv2.rectangle(frame_resize, box, color, 2)
                 cv2.putText(
                     frame_resize,
                     label,
                     (box[0]+5, box[1] + 25),
-                    cv2.FONT_HERSHEY_DUPLEX,
+                    cv2.FONT_HERSHEY_SIMPLEX,
                     0.5,
                     color,
                     2,
@@ -259,35 +236,34 @@ class Detector(customtkinter.CTkToplevel):
                 frame_resize,
                 fps_label,
                 (0, 25),
-                cv2.FONT_HERSHEY_DUPLEX,
+                cv2.FONT_HERSHEY_SIMPLEX,
                 1,
                 (0, 0, 0),
                 5,
             )
-        cv2.imshow("Video Predictions", frame_resize)
-        if cv2.waitKey(1) == 27:
-            return
+            cv2.imshow("Video Predictions", frame_resize)
+            if cv2.waitKey(1) == 27:
+                return
         cap.release()
         cv2.destroyAllWindows()
 
     #Video Weight Selector
     def define_video_weight(self):
-        Tk().withdraw()
-        filename = askopenfilename()
-        if (filename.lower().endswith(('.weights'))):
-            VIDEO_WEIGHT_PATH = filename
-        elif(filename.lower().endswith(('.cfg'))):
-            VIDEO_DETECTOR_CFG_PATH = filename
+        file_path = askopenfilename()
+        if (file_path.lower().endswith(('.weights'))):
+            VIDEO_WEIGHT_PATH = file_path
+        elif(file_path.lower().endswith(('.cfg'))):
+            VIDEO_DETECTOR_CFG_PATH = file_path
         else:
             self.trigger_error("Invalid file was selected", "Invalid File")
     #Create Detection Model
     def create_detection_model(self,weight, cfg):
         net = cv2.dnn.readNet(weight, cfg)
-        net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        #net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        #net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
         model = cv2.dnn_DetectionModel(net)
-        model.setInputParams(size=(640, 640), scale=1 / 255)
+        model.setInputParams(size=(416, 416),scale=1/255, swapRB=True)
         return model
 
     #Count Objects

@@ -1,0 +1,7 @@
+classes = 8
+train = C:/Users/delon/darknet/data/train.txt 
+valid = C:/Users/delon/darknet/data/test.txt 
+names = C:/Users/delon/darknet/obj_names.txt 
+backup = C:/Users/delon/darknet/backup
+
+

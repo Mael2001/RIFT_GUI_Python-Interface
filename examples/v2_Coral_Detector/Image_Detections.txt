@@ -1,0 +1,4 @@
+                        BICA Fish Detector
+
+(Read-Only)Recommendation: Save your detections to a file with a custom name using the Save As option.
+
