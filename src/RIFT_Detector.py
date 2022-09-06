@@ -128,8 +128,6 @@ class Detector(customtkinter.CTkToplevel):
             self.trigger_error("Invalid file was selected", "Invalid File")
             return
         img = cv2.imread(file_path)
-        width = img.shape[1]
-        height = img.shape[0]
         dim = (640, 640)
 
         # resize image
@@ -153,7 +151,7 @@ class Detector(customtkinter.CTkToplevel):
                 thickness=2,
             )
 
-            text = "%s: %.4f" % (classes[classId], score)
+            text = f"{classes[classId]}: {round(score*100,2)}%"
             cv2.putText(
                 resized,
                 text,
@@ -207,9 +205,8 @@ class Detector(customtkinter.CTkToplevel):
 
         while True:
             _, frame = cap.read()
-            width = int(640)
-            height = int(640)
-            dim = (width, height)
+            dim = (640, 640)
+
             start = time.time()
             frame_resize = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
             classes, scores, boxes = model.detect(frame_resize, 0.6, 0.4)
@@ -220,7 +217,7 @@ class Detector(customtkinter.CTkToplevel):
             end = time.time()
             for (classid, score, box) in zip(classes, scores, boxes):
                 color = COLORS[int(classid) % len(COLORS)]
-                label = f"{class_names[classid]} : {score}"
+                text = f"{class_names[classId]}: {round(score*100,2)}%"
                 cv2.rectangle(frame_resize, box, color, 2)
                 cv2.putText(
                     frame_resize,
