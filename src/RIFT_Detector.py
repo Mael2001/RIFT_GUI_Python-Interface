@@ -5,6 +5,7 @@ import time
 import cv2
 import os
 from stat import S_IREAD, S_IWRITE
+import seaborn as sns
 
 #Graphic Libraries
 import tkinter.messagebox
@@ -134,6 +135,7 @@ class Detector(customtkinter.CTkToplevel):
         resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
         with open(IMAGE_CLASSES, "r") as f:
             classes = f.read().splitlines()
+        palette = sns.color_palette(n_colors=12)
         model = self.create_detection_model(IMAGE_WEIGHT_PATH, IMAGE_DETECTOR_CFG_PATH)
 
         classIds, scores, boxes = model.detect(resized, confThreshold=0.6, nmsThreshold=0.4)
@@ -141,13 +143,13 @@ class Detector(customtkinter.CTkToplevel):
         detects = self.count_objects(data_mod)
         if(len(detects) != 0):
             for key, value in detects.items():
-                print(f'Detections:{key}\nClass Id: {classIds}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
+                print(f'Detections:{key}\nClass Id: {classIds[list(detects.keys()).index(key)]}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
         for (classId, score, box) in zip(classIds, scores, boxes):
             cv2.rectangle(
                 resized,
                 (box[0], box[1]),
                 (box[0] + box[2], box[1] + box[3]),
-                color=(0, 0, 255),
+                color=palette[classId],
                 thickness=2,
             )
 
@@ -158,7 +160,7 @@ class Detector(customtkinter.CTkToplevel):
                 (box[0]+5, box[1] + 25),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
-                color=(0, 0, 255),
+                color=palette[classId],
                 thickness=2,
             )
             cv2.imshow("Image Prediction", resized)
@@ -212,8 +214,8 @@ class Detector(customtkinter.CTkToplevel):
             classes, scores, boxes = model.detect(frame_resize, 0.6, 0.4)
             data_mod = classes, class_names
             detects = self.count_objects(data_mod)
-            if(len(detects) != 0):
-                print(f'Detections:{detects.keys()}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
+            for key, value in detects.items():
+                print(f'Detections:{key}\nClass Id: {classes[list(detects.keys()).index(key)]}\nImage: {os.path.basename(file_path)}\nConfidence: {scores}\nWidth,Height: {dim}')
             end = time.time()
             for (classid, score, box) in zip(classes, scores, boxes):
                 color = COLORS[int(classid) % len(COLORS)]
@@ -240,9 +242,9 @@ class Detector(customtkinter.CTkToplevel):
             )
             cv2.imshow("Video Predictions", frame_resize)
             if cv2.waitKey(1) == 27:
+                cap.release()
+                cv2.destroyAllWindows()
                 return
-        cap.release()
-        cv2.destroyAllWindows()
 
     #Video Weight Selector
     def define_video_weight(self):
