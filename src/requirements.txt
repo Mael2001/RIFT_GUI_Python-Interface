@@ -1,0 +1,12 @@
+setuptools
+pandas
+openpyxl
+auto-py-to-exe
+opencv-python==4.5.3.56
+phonenumbers
+customtkinter
+Pillow
+easygui
+seaborn
+imutils
+setuptools==59.8.0

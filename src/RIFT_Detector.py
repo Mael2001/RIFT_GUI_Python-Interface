@@ -6,6 +6,8 @@ import cv2
 import os
 from stat import S_IREAD, S_IWRITE
 import seaborn as sns
+import imutils
+from threading import *
 
 #Graphic Libraries
 import tkinter.messagebox
@@ -193,7 +195,6 @@ class Detector(customtkinter.CTkToplevel):
 
     #Video Detector
     def open_video_detector(self):
-        Tk().withdraw()
         file_path = askopenfilename()
         if (not file_path.lower().endswith(('.mp4'))):
             self.trigger_error("Invalid file was selected", "Invalid File")
@@ -202,16 +203,19 @@ class Detector(customtkinter.CTkToplevel):
         class_names = []
         with open(VIDEO_CLASSES, "r") as f:
             class_names = [cname.strip() for cname in f.readlines()]
-            cap = cv2.VideoCapture(file_path)
+        cap = cv2.VideoCapture(file_path)
         model = self.create_detection_model(VIDEO_WEIGHT_PATH, VIDEO_DETECTOR_CFG_PATH)
 
         while True:
+
             _, frame = cap.read()
+            if not _:
+                break
             dim = (640, 640)
 
             start = time.time()
             frame_resize = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
-            classes, scores, boxes = model.detect(frame_resize, 0.6, 0.4)
+            classes, scores, boxes = model.detect(frame_resize,confThreshold=0.6, nmsThreshold=0.4)
             data_mod = classes, class_names
             detects = self.count_objects(data_mod)
             for key, value in detects.items():
@@ -219,7 +223,7 @@ class Detector(customtkinter.CTkToplevel):
             end = time.time()
             for (classid, score, box) in zip(classes, scores, boxes):
                 color = COLORS[int(classid) % len(COLORS)]
-                text = f"{class_names[classId]}: {round(score*100,2)}%"
+                label = f"{class_names[classid]}: {round(score*100,2)}%"
                 cv2.rectangle(frame_resize, box, color, 2)
                 cv2.putText(
                     frame_resize,
@@ -230,6 +234,7 @@ class Detector(customtkinter.CTkToplevel):
                     color,
                     2,
                 )
+            end = time.time()
             fps_label = f"FPS: {round((1.0/(end - start)),2)}"
             cv2.putText(
                 frame_resize,
@@ -258,11 +263,11 @@ class Detector(customtkinter.CTkToplevel):
     #Create Detection Model
     def create_detection_model(self,weight, cfg):
         net = cv2.dnn.readNet(weight, cfg)
-        #net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        #net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
         model = cv2.dnn_DetectionModel(net)
-        model.setInputParams(size=(416, 416),scale=1/255, swapRB=True)
+        model.setInputParams(size=(640, 640),scale=1/255, swapRB=True)
         return model
 
     #Count Objects

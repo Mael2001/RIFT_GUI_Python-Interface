@@ -5,6 +5,8 @@ import os
 from openpyxl import *
 import phonenumbers
 import re
+from openpyxl.workbook.protection import WorkbookProtection
+
 
 #Graphic Libraries
 import tkinter.messagebox
@@ -42,7 +44,7 @@ class Inscription(customtkinter.CTkToplevel):
         app_center_coordinate_x = (WIDTH/2) - (Inscription.APP_WIDTH )
         app_center_coordinate_y = (HEIGHT/2) - (Inscription.APP_HEIGHT)
 
-        self.title("Plataforma RIFT")
+        self.title("RIFT Inscriptions")
         self.geometry(f"{Inscription.APP_WIDTH}x{Inscription.APP_HEIGHT}+{int(app_center_coordinate_x)}+{int(app_center_coordinate_y)}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
         self.configure(fg_color=("#189FE7"))
@@ -115,7 +117,7 @@ class Inscription(customtkinter.CTkToplevel):
         #EMAIL NUMBER INPUT
         self.email_input= customtkinter.CTkEntry(master=self.frame_home,
                                             width=Inscription.APP_WIDTH/2+50,
-                                            placeholder_text="email@test.com")
+                                            placeholder_text="email@email.com")
         self.email_input.grid(row=3,column=1, columnspan=2, pady=20, padx=20, sticky="we")
 
         #SECTION LABEL
@@ -167,7 +169,15 @@ class Inscription(customtkinter.CTkToplevel):
         if (os.path.exists(FILE_NAME) == False):
             self.WRITE_FORMULA = True
             print(f"Creating file at {FILE_NAME}")
-            self.create_workbook(FILE_NAME)
+            sheets = [
+                "Billfish",
+                "Rodeo",
+                "Junior",
+                "Kids",
+                "Women"
+                ]
+            self.create_workbook(FILE_NAME,sheets)
+            self.protect_workbook(FILE_NAME)
             headers = [
                 "ID",
                 "BOAT_NAME",
@@ -192,7 +202,7 @@ class Inscription(customtkinter.CTkToplevel):
             self.phone_number_input.get(),
             self.email_input.get(),
             "Participating" if self.billfish_category.get() else "Not Participating",
-            "Participating" if self.rodeo_category.get() else "Not Participating",
+            "Participating" if self.rodeo_category.get() or self.billfish_category.get()  else "Not Participating",
             "Participating" if self.junior_category.get() else "Not Participating",
             "Participating" if self.kids_category.get() else "Not Participating",
             "Participating" if self.women_category.get() else "Not Participating",
@@ -211,7 +221,10 @@ class Inscription(customtkinter.CTkToplevel):
     #Write Formula
     def write_formula(self,path):
         wb = load_workbook(path)
+        wb.security = WorkbookProtection(workbookPassword = 'letsfish', lockStructure = True)
         ws = wb["Inscription"]
+        ws.protection.sheet = True
+        ws.protection.enable()
         VALUE_HEADER = ws['N1']
         VALUE_HEADER.value = "TOTAL FEES"
         VALUE_FORMULA = ws['N2']
@@ -220,22 +233,29 @@ class Inscription(customtkinter.CTkToplevel):
         wb.save(path)
 
     #Creating XLSX File
-    def create_workbook(self,path):
-        workbook = Workbook()
-        sheet = workbook.active
-        sheet.title = "Inscription"
-
-        workbook.create_sheet("Billfish")
-        workbook.create_sheet("Rodeo")
-        workbook.create_sheet("Junior")
-        workbook.create_sheet("Kids")
-        workbook.create_sheet("Women")
-        workbook.save(path)
+    def create_workbook(self,path,sheets):
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Inscription"
+        for sheet in sheets:
+            wb.create_sheet(sheet)
+        wb.save(path)
+    #Password Protect Workbook and Worksheet
+    def protect_workbook(self,path):
+        wb = load_workbook(path)
+        wb.security = WorkbookProtection(workbookPassword = 'letsfish', lockStructure = True)
+        for worksheets in wb.sheetnames:
+            ws = wb[worksheets]
+            ws.protection.sheet = True
+            ws.protection.enable()
+            ws.protection.password ="letsfish"
+        wb.save(path)
     #Writing to File
     def write_to_sheet(self,path,sheetName,data):
         wb = load_workbook(path)
         ws = wb[sheetName]
         ws.append(data)
+        wb.security = WorkbookProtection(workbookPassword = 'letsfish', lockStructure = True)
         wb.save(path)
     #Validate input fields
     def validate_fields(self):

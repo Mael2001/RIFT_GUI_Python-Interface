@@ -39,13 +39,14 @@ class Registration(customtkinter.CTkToplevel):
         "Billfish":[
             "Blue Marlin",
             "White Marlin",
-            "Sailfish & Spearfish"
+            "Sailfish",
+            "Spearfish"
         ],
         "Rodeo":[
             "Wahoo",
             "Dolphin",
             "Tuna",
-            "Kingfish"
+            "King Fish"
         ],
         "Junior":[
             "Barracuda",
@@ -102,7 +103,7 @@ class Registration(customtkinter.CTkToplevel):
         app_center_coordinate_x = (WIDTH/2) - (Registration.APP_WIDTH )
         app_center_coordinate_y = (HEIGHT/2) - (Registration.APP_HEIGHT)
 
-        self.title("Plataforma RIFT")
+        self.title("Catch Log")
         self.geometry(f"{Registration.APP_WIDTH}x{Registration.APP_HEIGHT}+{int(app_center_coordinate_x)}+{int(app_center_coordinate_y)}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
         self.configure(fg_color=("#189FE7"))
@@ -362,14 +363,13 @@ class Registration(customtkinter.CTkToplevel):
         wb = load_workbook(path)
         ws = wb[sheetName]
         row = (hookup_result['HOOKUP_ID'])+1
-        row = row.values[0]
         print(hookup_result)
         RELEASE_TIME = ws.cell(row=row,column=7)
         RELEASE_TIME.value = datetime.now().strftime("%H:%M:%S")
         CLEAN_RELEASE = ws.cell(row=row,column=8)
         CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
         POINTS = ws.cell(row=row,column=9)
-        POINTS.value = hookup_result['POINTS'].values[0] + 50 if self.clean_release.get() else hookup_result['POINTS'].values[0]
+        POINTS.value = hookup_result['POINTS'] + 50 if self.clean_release.get() else hookup_result['POINTS']
         wb.save(path)
 
     #View XLSX file

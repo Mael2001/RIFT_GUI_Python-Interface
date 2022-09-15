@@ -70,7 +70,7 @@ class App(customtkinter.CTk):
 
         #RIFT REGISTRATION
         rift_registration = customtkinter.CTkButton(master=self,
-                                                    text="Registrations",
+                                                    text="Catch Log",
                                                     height=80,
                                                     width=230,
                                                     corner_radius=5,
