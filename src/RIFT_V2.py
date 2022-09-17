@@ -80,16 +80,16 @@ class App(customtkinter.CTk):
                                                     command=self.open_registration)
         rift_registration.place(relx=0.7, rely=0.7, anchor=tkinter.CENTER)
 
-        #RIFT PAGE
+        #RIFT Worksheet
         rift_website = customtkinter.CTkButton(master=self,
-                                                    text="Website",
+                                                    text="Worksheet",
                                                     height=80,
                                                     width=230,
                                                     corner_radius=5,
                                                     fg_color="white",
                                                     text_color="black",
                                                     text_font=("Adobe Ming Std L",25),
-                                                    command=self.open_website)
+                                                    command=self.open_worksheet)
         rift_website.place(relx=0.3, rely=0.81, anchor=tkinter.CENTER)
 
         #RIFT LeaderBoard
@@ -137,10 +137,10 @@ class App(customtkinter.CTk):
         logging.info("Opening Registration")
         registration = RIFT_Registration.Registration(self)
         registration.resizable(False,False)
-    #Open Competition Website
-    def open_website(self):
-        logging.info("Opening Website")
-        webbrowser.open('https://letsfishroatan.com/')
+    #Open Competition Worksheet
+    def open_worksheet(self):
+        logging.info("Opening Worksheet")
+        webbrowser.open(".\dump\\RIFT.xlsx")
     #Open Leaderboards Page'
     def open_leaderboard(self):
         logging.info("Opening Leaderboards")

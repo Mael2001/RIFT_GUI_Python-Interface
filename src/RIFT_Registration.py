@@ -79,7 +79,8 @@ class Registration(customtkinter.CTkToplevel):
     fish_prices = {
             "Blue Marlin":500,
             "White Marlin":300,
-            "Sailfish & Spearfish":200,
+            "Sailfish":200,
+            "Spearfish":200,
 
             "Wahoo":0,
             "Dolphin":0,
@@ -363,13 +364,14 @@ class Registration(customtkinter.CTkToplevel):
         wb = load_workbook(path)
         ws = wb[sheetName]
         row = (hookup_result['HOOKUP_ID'])+1
+        row = row.values[0]
         print(hookup_result)
         RELEASE_TIME = ws.cell(row=row,column=7)
         RELEASE_TIME.value = datetime.now().strftime("%H:%M:%S")
         CLEAN_RELEASE = ws.cell(row=row,column=8)
         CLEAN_RELEASE.value = "Yes" if self.clean_release.get() else "No"
         POINTS = ws.cell(row=row,column=9)
-        POINTS.value = hookup_result['POINTS'] + 50 if self.clean_release.get() else hookup_result['POINTS']
+        POINTS.value = hookup_result['POINTS'].values[0] + 50 if self.clean_release.get() else hookup_result['POINTS'].values[0]
         wb.save(path)
 
     #View XLSX file
@@ -405,8 +407,9 @@ class Registration(customtkinter.CTkToplevel):
         boat_id = self.boat_input.get()
         for result in (excel_data.isin([int(boat_id)]).any()):
             if result:
+                print(excel_data.loc[excel_data['ID'] == int(boat_id)].squeeze())
                 #Getting team information
-                self.current_team = excel_data.iloc[int(boat_id)-1]
+                self.current_team = excel_data.loc[excel_data['ID'] == int(boat_id)].squeeze()
                 #Writing Search Results
                 self.search_boat_name.configure(state=tkinter.NORMAL)
                 self.search_captain_name.configure(state=tkinter.NORMAL)

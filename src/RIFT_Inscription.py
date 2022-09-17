@@ -18,7 +18,7 @@ from PIL import Image, ImageTk
 
 #SIZE
 COMPLETE_WIDTH = 600
-COMPLETE_HEIGHT = 600
+COMPLETE_HEIGHT = 850
 
 #Working Directories
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -120,6 +120,66 @@ class Inscription(customtkinter.CTkToplevel):
                                             placeholder_text="email@email.com")
         self.email_input.grid(row=3,column=1, columnspan=2, pady=20, padx=20, sticky="we")
 
+        #NACIONALITY NUMBER LABEL
+        self.nacionality_label = customtkinter.CTkLabel(master=self.frame_home,
+                                                    corner_radius=7,
+                                                    text="Enter Nacionality: ")
+        self.nacionality_label.grid(row=4,column=0,padx=10,pady=20)
+
+        #NACIONALITY NUMBER INPUT
+        self.nacionality_input= customtkinter.CTkEntry(master=self.frame_home,
+                                            width=Inscription.APP_WIDTH/2+50,
+                                            placeholder_text="Nacionality")
+        self.nacionality_input.grid(row=4,column=1, columnspan=2, pady=20, padx=20, sticky="we")
+
+        #EXTRA KIDS NUMBER LABEL
+        self.extra_kids_label = customtkinter.CTkLabel(master=self.frame_home,
+                                                    corner_radius=7,
+                                                    text="Enter Extra Kids: ")
+        self.extra_kids_label.grid(row=5,column=0,padx=10,pady=20)
+
+        #EXTRA KIDS NUMBER INPUT
+        self.extra_kids_input= customtkinter.CTkEntry(master=self.frame_home,
+                                            width=Inscription.APP_WIDTH/2+50,
+                                            placeholder_text="Number of Kids")
+        self.extra_kids_input.grid(row=5,column=1, columnspan=2, pady=20, padx=20, sticky="we")
+
+        #EXTRA CREW NUMBER LABEL
+        self.extra_crew_label = customtkinter.CTkLabel(master=self.frame_home,
+                                                    corner_radius=7,
+                                                    text="Enter Extra Crew: ")
+        self.extra_crew_label.grid(row=6,column=0,padx=10,pady=20)
+
+        #EXTRA CREW NUMBER INPUT
+        self.extra_crew_input= customtkinter.CTkEntry(master=self.frame_home,
+                                            width=Inscription.APP_WIDTH/2+50,
+                                            placeholder_text="Number of Crew")
+        self.extra_crew_input.grid(row=6,column=1, columnspan=2, pady=20, padx=20, sticky="we")
+
+        #EXTRA HATS NUMBER LABEL
+        self.extra_hats_label = customtkinter.CTkLabel(master=self.frame_home,
+                                                    corner_radius=7,
+                                                    text="Enter Extra Hats: ")
+        self.extra_hats_label.grid(row=7,column=0,padx=10,pady=20)
+
+        #EXTRA HATS NUMBER INPUT
+        self.extra_hats_input= customtkinter.CTkEntry(master=self.frame_home,
+                                            width=Inscription.APP_WIDTH/2+50,
+                                            placeholder_text="Number of Hats")
+        self.extra_hats_input.grid(row=7,column=1, columnspan=2, pady=20, padx=20, sticky="we")
+
+        #EXTRA SHIRTS NUMBER LABEL
+        self.extra_shirts_label = customtkinter.CTkLabel(master=self.frame_home,
+                                                    corner_radius=7,
+                                                    text="Enter Extra Shirts: ")
+        self.extra_shirts_label.grid(row=8,column=0,padx=10,pady=20)
+
+        #EXTRA SHIRTS NUMBER INPUT
+        self.extra_shirts_input= customtkinter.CTkEntry(master=self.frame_home,
+                                            width=Inscription.APP_WIDTH/2+50,
+                                            placeholder_text="Number of Shirts")
+        self.extra_shirts_input.grid(row=8,column=1, columnspan=2, pady=20, padx=20, sticky="we")
+
         #SECTION LABEL
         categories_label = customtkinter.CTkLabel(master=self.frame_home,
                                                     corner_radius=7,
@@ -127,32 +187,32 @@ class Inscription(customtkinter.CTkToplevel):
                                                     fg_color=("white", "grey38"),  # <- custom tuple-color
                                                     text_font=("Arial",14),
                                                     text="Categories")
-        categories_label.grid(row=4,column=0,columnspan=3,padx=15,pady=10)
+        categories_label.grid(row=9,column=0,columnspan=3,padx=15,pady=10)
 
         #BILLFISH CATEGORY
         self.billfish_category = customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Billfish")
-        self.billfish_category.grid(row=5,column=0,columnspan=1,padx=15,pady=10)
+        self.billfish_category.grid(row=10,column=0,columnspan=1,padx=15,pady=10)
 
         #RODEO CATEGORY
         self.rodeo_category = customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Rodeo")
-        self.rodeo_category.grid(row=5,column=1,columnspan=1,padx=15,pady=10)
+        self.rodeo_category.grid(row=10,column=1,columnspan=1,padx=15,pady=10)
 
         #JUNIOR CATEGORY
         self.junior_category = customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Junior")
-        self.junior_category.grid(row=5,column=2,columnspan=1,padx=15,pady=10)
+        self.junior_category.grid(row=10,column=2,columnspan=1,padx=15,pady=10)
 
         #KIDS CATEGORY
         self.kids_category = customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Kids")
-        self.kids_category.grid(row=6,column=0,columnspan=2,padx=15,pady=10)
+        self.kids_category.grid(row=11,column=0,columnspan=2,padx=15,pady=10)
 
         #WOMEN CATEGORY
         self.women_category = customtkinter.CTkCheckBox(master=self.frame_home,
                                                     text="Women")
-        self.women_category.grid(row=6,column=1,columnspan=2,padx=15,pady=10)
+        self.women_category.grid(row=11,column=1,columnspan=2,padx=15,pady=10)
 
 
         #REGISTER BUTTON
@@ -161,7 +221,7 @@ class Inscription(customtkinter.CTkToplevel):
                                                     width=Inscription.APP_WIDTH-50,
                                                     text_color="white",
                                                     command=self.register)
-        self.register_button.grid(row=7,column=0,columnspan=4,padx=15,pady=10)
+        self.register_button.grid(row=12,column=0,columnspan=4,padx=15,pady=10)
 
     #Dump Values to XLSX file
     def register(self):
@@ -184,6 +244,11 @@ class Inscription(customtkinter.CTkToplevel):
                 "CAPTAIN_NAME",
                 "PHONE_NUMBER",
                 "EMAIL",
+                "NACIONALITY",
+                "EXTRA_KIDS",
+                "EXTRA_CREW",
+                "EXTRA_HATS"
+                "EXTRA_SHIRTS",
                 "BILLFISH_PRESENT",
                 "RODEO_PRESENT",
                 "JUNIOR_PRESENT",
@@ -201,17 +266,21 @@ class Inscription(customtkinter.CTkToplevel):
             self.captain_input.get(),
             self.phone_number_input.get(),
             self.email_input.get(),
+            self.nacionality_input.get(),
+            self.extra_crew_input.get(),
+            self.extra_hats_input.get(),
+            self.extra_shirts_input.get(),
             "Participating" if self.billfish_category.get() else "Not Participating",
             "Participating" if self.rodeo_category.get() or self.billfish_category.get()  else "Not Participating",
             "Participating" if self.junior_category.get() else "Not Participating",
             "Participating" if self.kids_category.get() else "Not Participating",
             "Participating" if self.women_category.get() else "Not Participating",
-            f'=IF(F{ws.max_row+1}="Participating",700,0)+IF(G{ws.max_row+1}="Participating",350,0)+IF(H{ws.max_row+1}="Participating",300,0)+IF(I{ws.max_row+1}="Participating",50,0)+IF(J{ws.max_row+1}="Participating",50,0)'
+            f'=IF(K{ws.max_row+1}="Participating",700,0)+IF(L{ws.max_row+1}="Participating",IF(K{ws.max_row+1}<>"Participating",350),0)+IF(M{ws.max_row+1}="Participating",300,0)+IF(N{ws.max_row+1}="Participating",IF(G{ws.max_row+1}>0,G{ws.max_row+1}*50),0)+IF(O{ws.max_row+1}="Participating",100,0)+(H{ws.max_row+1}*100)+(J{ws.max_row+1}*25)+(I{ws.max_row+1}*15)'
         ]
         if(self.validate_fields()):
             self.write_to_sheet(FILE_NAME,"Inscription",data)
             print(f"Wrote to {FILE_NAME}")
-            self.trigger_message(f"Data has been written to {FILE_NAME}","Registered")
+            self.trigger_message(f"Data saved","Registered")
             if(self.WRITE_FORMULA):
                 self.WRITE_FORMULA = False
                 self.write_formula(FILE_NAME)
@@ -225,10 +294,10 @@ class Inscription(customtkinter.CTkToplevel):
         ws = wb["Inscription"]
         ws.protection.sheet = True
         ws.protection.enable()
-        VALUE_HEADER = ws['N1']
+        VALUE_HEADER = ws['Q1']
         VALUE_HEADER.value = "TOTAL FEES"
-        VALUE_FORMULA = ws['N2']
-        VALUE_FORMULA.value = '=SUM(K:K)'
+        VALUE_FORMULA = ws['Q2']
+        VALUE_FORMULA.value = '=SUM(P:P)'
         VALUE_FORMULA.number_format = '$#,##0.00'
         wb.save(path)
 
@@ -270,10 +339,12 @@ class Inscription(customtkinter.CTkToplevel):
         #Validating Phone Number Input
         if(self.validate_phone_number(self.phone_number_input.get())== False or not self.phone_number_input.get()):
             self.trigger_error("Phone Number is not valid Input","Invalid Phone")
-            return False
+            return True
+        #Validating Email Input
         if(self.validate_email(self.email_input.get())== False or not self.email_input.get()):
             self.trigger_error("Email is not valid Input","Invalid Email")
             return False
+        #Validating Categories Input
         if(self.validate_categories()==False):
             self.trigger_error("No Categories have been selected","Error")
             return False
